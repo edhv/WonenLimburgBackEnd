@@ -35,6 +35,16 @@ class BuzzFeed_collection {
 
 	private $v = 1;
 
+	function has_cache($name) {
+		$cache = get_transient($name);
+		if($cache !== FALSE) {
+			return true;
+		}
+
+		return false;
+
+	}
+
 	/* Cache the data */
 	function fetch_cache($name =  '')
 	{
@@ -64,7 +74,6 @@ class BuzzFeed_collection {
 		
 		$data[0] = $this->feeds;
 		$data[1] = $this->total;
-		
 		$data_encoded = $data;
 		
 		//Set the cache

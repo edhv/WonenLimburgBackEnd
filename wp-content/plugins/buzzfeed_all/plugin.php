@@ -194,6 +194,7 @@ if( class_exists('BuzzFeed_collection') ) {
 			
             if($use_cache == TRUE)
 			{
+				echo "AAA";
 				$this->fetch_cache('all_feeds');
 				return;	
 			}
@@ -289,19 +290,28 @@ if( class_exists('BuzzFeed_collection') ) {
 					
 
 					if(in_array($items[2],$types)){
-					$url = call_user_func_array('self::get_source_url', $items); //$this->get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type, $lat, $long, $radius);
-										
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-					curl_setopt($ch, CURLOPT_URL, $url);
-					$result = json_decode(curl_exec($ch));
-					curl_close($ch);
-				
-					//Add the result
-					$this->feeds[] = $result;
 
-				}
+						/*
+						$url = call_user_func_array('self::get_source_url', $items); //$this->get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type, $lat, $long, $radius);
+											
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_URL, $url);
+						$result = json_decode(curl_exec($ch));
+						curl_close($ch);*/
+
+
+						// replaced the expensive curl with the call of a simple hook
+						$result = apply_filters("wordpress/get_feeds", array(
+							"source"=>$items[2],
+							"nr_of_feeds"=>$items[3]
+						));
+
+						//Add the result
+						$this->feeds[] = $result;
+
+					}
 
 
 				}
@@ -309,18 +319,32 @@ if( class_exists('BuzzFeed_collection') ) {
 				else {
 
 					if(in_array($items[0],$types)){
-					$url = call_user_func_array('self::get_source_url', $items); //$this->get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type, $lat, $long, $radius);
-					
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-					curl_setopt($ch, CURLOPT_URL, $url);
-					$result = json_decode(curl_exec($ch));
-					curl_close($ch);
-					
-					//Add the result
-					$this->feeds[] = $result;
-				}}
+
+
+						/*
+						$url = call_user_func_array('self::get_source_url', $items); //$this->get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type, $lat, $long, $radius);
+
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_URL, $url);
+						$result = json_decode(curl_exec($ch));
+						curl_close($ch);
+						
+						//Add the result
+						$this->feeds[] = $result;
+						*/
+
+						//replaced the expensive curl with the call of a simple hook
+						$result = apply_filters($items[0]."/get_feeds", array(
+							"nr_of_feeds"=>$items[3]
+						));
+				
+						//Add the result
+						$this->feeds[] = $result;
+
+					}
+				}
 				
 			}
 			
@@ -386,12 +410,14 @@ if( class_exists('BuzzFeed') ) {
           if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']+1; }
           if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
 
+          $this->feeds_collection->feeds = [];
+
 		  $this->feeds_collection->get_all_feeds($types,$nr_of_feeds);
 		  $this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
 		  $this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
-			
+			//print_r($this->feeds_collection->feeds);
 			// Return status and response
-			return array("status_code" => 1,"totalamount"=>$this->feeds_collection->total,"response" => $this->feeds_collection->feeds);
+		return array("status_code" => 1,"totalamount"=>$this->feeds_collection->total,"response" => $this->feeds_collection->feeds);
 
 
 		}

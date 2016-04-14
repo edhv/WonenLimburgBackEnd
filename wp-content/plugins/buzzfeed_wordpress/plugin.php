@@ -43,69 +43,68 @@ if( class_exists('BuzzFeed_collection') ) {
 		{
 
 			// Cache the data
-			if($this->has_cache == TRUE)
-			return;
-
+			//if($this->has_cache == TRUE)
+			//return;
 
 
 			if ($source=='kalender'){
 
-			$args     = array(
+				$args     = array(
 
-					  	    'post_type' =>	$source,
-							'meta_key'	=>	'begin_tijd',
-							'orderby'	=>	'meta_value',
-							'order'		=>	'ASC',
+					'post_type' =>	$source,
+					'meta_key'	=>	'begin_tijd',
+					'orderby'	=>	'meta_value',
+					'order'		=>	'ASC',
 
-						  	'meta_query' => array(
-		        								array(
-									            'key' => 'begin_tijd',
-									            'compare' => '>=',
-									            'value'   => $startdate,
-									            ),
+					'meta_query' => array(
+						array(
+							'key' => 'begin_tijd',
+							'compare' => '>=',
+							'value'   => $startdate,
+							),
 
-									          	array(
-									            'key'     => 'eind_tijd',
-									            'compare' => '<=',
-									            'value'   => $enddate,
-										        ),
-        								),
-							  );
-						}
+						array(
+							'key'     => 'eind_tijd',
+							'compare' => '<=',
+							'value'   => $enddate,
+							),
+						),
+					);
+			}
 
 			else if($source=='jaarverslagdetail'){
-			$args     = array(
+				$args     = array(
 
-			  	    'post_type' =>	'jaarverslag',
+					'post_type' =>	'jaarverslag',
 					'meta_key'	=>	'edition',
 					'orderby'	=>	'meta_value',
 					'order'		=>	'ASC',
-				  	'meta_query' => array(
-					            'key' => 'edition',
-					            'compare' => 'LIKE',
-					            'value'   => $startdate
-					            ),
-					  	);
+					'meta_query' => array(
+						'key' => 'edition',
+						'compare' => 'LIKE',
+						'value'   => $startdate
+						),
+					);
 			}
 
 			else if($source=='wieiswie'){
 				$args     = array(
 
-			  	    'post_type' =>	$source,
+					'post_type' =>	$source,
 					'orderby'	=>	'post_title',
 					'order'		=>	$sort,
 
 
-					  	);
+					);
 
 				if(!empty($afdeling)){
 					$add = array(
 						'meta_key' => 'afdeling',
 						'meta_query' => array(
-					    'key' => 'afdeling',
-					    'compare' => 'LIKE',
-					    'value'   => $afdeling,
-					            ),);
+							'key' => 'afdeling',
+							'compare' => 'LIKE',
+							'value'   => $afdeling,
+							),);
 
 					$args = array_merge($args,$add);
 
@@ -114,7 +113,7 @@ if( class_exists('BuzzFeed_collection') ) {
 				if(!empty($naam)){
 					$add = array(
 						'search_name' => $naam
-					);
+						);
 
 					$args = array_merge($args,$add);
 
@@ -124,10 +123,10 @@ if( class_exists('BuzzFeed_collection') ) {
 					$add = array(
 						'meta_key' => 'regio',
 						'meta_query' => array(
-					    'key' => 'regio',
-					    'compare' => 'IN',
-					    'value'   => $regio,
-					            ),);
+							'key' => 'regio',
+							'compare' => 'IN',
+							'value'   => $regio,
+							),);
 
 					$args = array_merge($args,$add);
 
@@ -139,25 +138,25 @@ if( class_exists('BuzzFeed_collection') ) {
 			{
 
 				$args =  array(
-							  	'post_type' =>	'home'
+					'post_type' =>	'home'
 
-							  );
+					);
 
 				$this->total = 1;
 			}
 
 			else{
 
-			$args     = array(
-							  	'post_type' =>	$source
+				$args     = array(
+					'post_type' =>	$source
 
-							  );
+					);
 			}
 
-			$query    = new WP_Query($args);
+			$query = new WP_Query($args);
 
 
-			$this->total	=	(int)$query->found_posts;
+			$this->total = (int)$query->found_posts;
 
 			// loop trough the posts
 
@@ -166,12 +165,12 @@ if( class_exists('BuzzFeed_collection') ) {
 
 
 
-			if($source=='boekenkast' || $source=='huurdersraad' || $source=='koopenwoon' || $source=='werkenbij' ){
+				if($source=='boekenkast' || $source=='huurdersraad' || $source=='koopenwoon' || $source=='werkenbij' ){
 
-				$feed_object = new BuzzFeedWordpress_object();
+					$feed_object = new BuzzFeedWordpress_object();
 
-				switch ($source) {
-					case 'boekenkast':
+					switch ($source) {
+						case 'boekenkast':
 
 						$page = get_page_by_title('boekenkast','OBJECT','home');
 						$photo_url = get_field('img',$page->ID);
@@ -188,7 +187,7 @@ if( class_exists('BuzzFeed_collection') ) {
 						$this->feeds[] = $feed_object;
 						break;
 
-					case 'huurdersraad':
+						case 'huurdersraad':
 
 						$page = get_page_by_title('huurdersraad','OBJECT','home');
 						$photo_url = get_field('img',$page->ID);
@@ -205,7 +204,7 @@ if( class_exists('BuzzFeed_collection') ) {
 						$this->feeds[] = $feed_object;
 						break;
 
-					case 'koopenwoon':
+						case 'koopenwoon':
 
 						$page = get_page_by_title('koopenwoon','OBJECT','home');
 						$photo_url = get_field('img',$page->ID);
@@ -222,7 +221,7 @@ if( class_exists('BuzzFeed_collection') ) {
 						$this->feeds[] = $feed_object;
 						break;
 
-					case 'werkenbij':
+						case 'werkenbij':
 
 						$page = get_page_by_title('werkenbij','OBJECT','home');
 						$photo_url = get_field('img',$page->ID);
@@ -239,167 +238,169 @@ if( class_exists('BuzzFeed_collection') ) {
 						$this->feeds[] = $feed_object;
 						break;
 
-					default:
+						default:
 						# code...
 						break;
+					}
+
 				}
 
-			}
+				else if($source=='kalender' || $source=='meldingen' || $source=='wieiswie' || $source=='brochure' || $source=='buurtvan' || $source=='bericht' || $source=='jaarverslag' ){
 
-			else if($source=='kalender' || $source=='meldingen' || $source=='wieiswie' || $source=='brochure' || $source=='buurtvan' || $source=='bericht' || $source=='jaarverslag' ){
-
-				foreach($query->posts as $post)
-				{
-
+					foreach($query->posts as $post)
+					{
+						//print_r($post);
 				    // get the post data
-					$post_id    = $post->ID;
+						$post_id    = $post->ID;
 
-					$post_url   = get_field('url', $post_id);
+						$post_url   = get_field('url', $post_id);
 
 					// Compose object
-					$feed_object = new BuzzFeedWordpress_object();
+						$feed_object = new BuzzFeedWordpress_object();
+						$post_date = strtotime($post->post_date);
+
+						$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'photo', true));
+
+						$feed_object->set_url($post_url);
+
+						if($source=="kalender" || $source=="meldingen"){
+
+							$post_date = get_post_meta($post_id, 'begin_tijd', true);
+							$feed_object->set_starttimedate(get_post_meta($post_id, 'begin_tijd', true));
+							$feed_object->set_endtimedate(get_post_meta($post_id, 'eind_tijd', true));
+
+							if($source=="kalender"){
+
+								$feed_object->set_contact_mail(get_post_meta($post_id, 'contact_email', true));
+								$feed_object->set_contact_tel(get_post_meta($post_id, 'contact_tel', true));
+								$feed_object->set_contact_url(str_replace('http://www.','',get_post_meta($post_id, 'contact_website', true)));
+
+								$location = get_post_meta($post_id, 'locatie_map', true);
+								$feed_object->set_locatie($location['address']);
+								$feed_object->set_lat($location['lat']);
+								$feed_object->set_long($location['lng']);
+							}
+
+							else if($source=="meldingen"){
+
+								$post->post_type='melding';
+								$post->post_content = get_field('beschrijving',$post_id);
+								$feed_object->set_colour_code(get_post_meta($post_id, 'status', true));
+							}
+						}
+
+
+						else if($source=="wieiswie"){
+							$formatted_telnr = get_post_meta($post_id, 'persoon_telnr', true);
+							$length = strlen($formatted_telnr);
+
+							if($length == 10) {
+								$formatted_telnr = preg_replace("/^1?(\d{3})(\d{4})(\d{3})$/", "$1-$2 $3", $formatted_telnr);
+							}
+
+							$feed_object->set_wieiswie_mail(get_post_meta($post_id, 'persoon_email', true));
+						//$feed_object->set_wieiswie_tel(get_post_meta($post_id, 'persoon_telnr', true));
+							$feed_object->set_wieiswie_tel($formatted_telnr);
+							$feed_object->set_wieiswie_regio(get_post_meta($post_id, 'regio', true));
+							$feed_object->set_wieiswie_afdeling(get_post_meta($post_id, 'afdeling', true));
+						}
+
+
+
+						else if($source=="brochure" || $source=="buurtvan"){
+							$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'cover_img', true));
+							$pdf_link = wp_get_attachment_url(get_post_meta($post_id, 'pdf_link', true));
+							$feed_object->set_pdf_link($pdf_link);
+
+							if ($source=="buurtvan"){
+								$feed_object->set_colour_code(get_post_meta($post_id, 'colourcode', true));
+								$feed_object->set_quote(get_post_meta($post_id, 'quote', true));
+
+							}
+						}
+
+						else if ($source=="jaarverslag"){
+
+							$post->post_type='jaarverslag';
+							$page = get_page_by_title('jaarverslag','OBJECT','home');
+							$feed_object->set_starttimedate(get_post_meta($post_id, 'edition', true));
+							$photo_url = get_field('img',$page->ID);
+							$photo_url = $photo_url['sizes']['large-thumb'];
+						}
+
+						else if($source=="bericht")
+						{
+							$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'bericht_img', true));
+							$post->post_content = get_field('bericht_text',$post_id);
+							$post->post_type = get_field('bericht_type',$post_id)."bericht";
+
+						}
+
+						$feed_object->set_media($photo_url);
+
+						$feed_object->set_type($post->post_type);
+						$feed_object->set_feed_id($post_id);
+						$feed_object->set_timestamp($post_date);
+						$feed_object->set_date($post_date);
+						$feed_object->set_title($post->post_title);
+
+						$feed_object->set_text($post->post_content);
+
+						$this->feeds[] = $feed_object;
+					//	print_r($feed_object);
+					}
+				}
+
+				elseif($source=='jaarverslagdetail'){
+
+					$post = $query->posts[0];
+					$post_id = $post->ID;
+
 					$post_date = strtotime($post->post_date);
 
-					$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'photo', true));
+					$paginas = get_field('layout',$post_id);
 
-					$feed_object->set_url($post_url);
+					$this->total	=	count($paginas);
 
-					if($source=="kalender" || $source=="meldingen"){
+					foreach($paginas as $pagina){
 
-						$post_date = get_post_meta($post_id, 'begin_tijd', true);
-						$feed_object->set_starttimedate(get_post_meta($post_id, 'begin_tijd', true));
-						$feed_object->set_endtimedate(get_post_meta($post_id, 'eind_tijd', true));
+						$feed_object = new BuzzFeedWordpress_object();
 
-						if($source=="kalender"){
+						if($pagina['acf_fc_layout']=='layout_text'){
 
-							$feed_object->set_contact_mail(get_post_meta($post_id, 'contact_email', true));
-							$feed_object->set_contact_tel(get_post_meta($post_id, 'contact_tel', true));
-							$feed_object->set_contact_url(str_replace('http://www.','',get_post_meta($post_id, 'contact_website', true)));
-
-							$location = get_post_meta($post_id, 'locatie_map', true);
-							$feed_object->set_locatie($location['address']);
-							$feed_object->set_lat($location['lat']);
-							$feed_object->set_long($location['lng']);
+							$post_type = 'text';
+							$photo_url='';
+							$post_text= $pagina['text'];
 						}
 
-						else if($source=="meldingen"){
-						$post->post_type='melding';
-						$post->post_content = get_field('beschrijving',$post_id);
-						$feed_object->set_colour_code(get_post_meta($post_id, 'status', true));
+						elseif($pagina['acf_fc_layout']=='layout_img'){
+
+							$post_type = 'img';
+							$photo_url= $pagina['img']['sizes']['large'];
+							$post_text= '';
 						}
-					}
 
+						$feed_object->set_media($photo_url);
 
-					else if($source=="wieiswie"){
-						$formatted_telnr = get_post_meta($post_id, 'persoon_telnr', true);
-						$length = strlen($formatted_telnr);
+						$feed_object->set_type($post_type);
+						$feed_object->set_feed_id($post_id);
+						$feed_object->set_timestamp($post_date);
+						$feed_object->set_date($post_date);
+						$feed_object->set_title($post->post_title);
 
-					  if($length == 10) {
-					  	$formatted_telnr = preg_replace("/^1?(\d{3})(\d{4})(\d{3})$/", "$1-$2 $3", $formatted_telnr);
-					  }
+						$feed_object->set_text($post_text);
 
-						$feed_object->set_wieiswie_mail(get_post_meta($post_id, 'persoon_email', true));
-						//$feed_object->set_wieiswie_tel(get_post_meta($post_id, 'persoon_telnr', true));
-						$feed_object->set_wieiswie_tel($formatted_telnr);
-						$feed_object->set_wieiswie_regio(get_post_meta($post_id, 'regio', true));
-						$feed_object->set_wieiswie_afdeling(get_post_meta($post_id, 'afdeling', true));
-					}
-
-
-
-					else if($source=="brochure" || $source=="buurtvan"){
-						$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'cover_img', true));
-						$pdf_link = wp_get_attachment_url(get_post_meta($post_id, 'pdf_link', true));
-						$feed_object->set_pdf_link($pdf_link);
-
-						if ($source=="buurtvan"){
-							$feed_object->set_colour_code(get_post_meta($post_id, 'colourcode', true));
-							$feed_object->set_quote(get_post_meta($post_id, 'quote', true));
-
-						}
-					}
-
-					else if ($source=="jaarverslag"){
-
-						$post->post_type='jaarverslag';
-						$page = get_page_by_title('jaarverslag','OBJECT','home');
-						$feed_object->set_starttimedate(get_post_meta($post_id, 'edition', true));
-						$photo_url = get_field('img',$page->ID);
-						$photo_url = $photo_url['sizes']['large-thumb'];
-					}
-
-					else if($source=="bericht")
-					{
-						$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'bericht_img', true));
-						$post->post_content = get_field('bericht_text',$post_id);
-						$post->post_type = get_field('bericht_type',$post_id)."bericht";
+						$this->feeds[] = $feed_object;
 
 					}
-
-					$feed_object->set_media($photo_url);
-
-					$feed_object->set_type($post->post_type);
-					$feed_object->set_feed_id($post_id);
-					$feed_object->set_timestamp($post_date);
-					$feed_object->set_date($post_date);
-					$feed_object->set_title($post->post_title);
-
-					$feed_object->set_text($post->post_content);
-
-					$this->feeds[] = $feed_object;
-				}
-			}
-
-			elseif($source=='jaarverslagdetail'){
-
-				$post = $query->posts[0];
-				$post_id = $post->ID;
-
-				$post_date = strtotime($post->post_date);
-
-				$paginas = get_field('layout',$post_id);
-
-				$this->total	=	count($paginas);
-
-				foreach($paginas as $pagina){
-
-				$feed_object = new BuzzFeedWordpress_object();
-
-					if($pagina['acf_fc_layout']=='layout_text'){
-
-						$post_type = 'text';
-						$photo_url='';
-						$post_text= $pagina['text'];
-					}
-
-					elseif($pagina['acf_fc_layout']=='layout_img'){
-
-						$post_type = 'img';
-						$photo_url= $pagina['img']['sizes']['large'];
-						$post_text= '';
-					}
-
-					$feed_object->set_media($photo_url);
-
-					$feed_object->set_type($post_type);
-					$feed_object->set_feed_id($post_id);
-					$feed_object->set_timestamp($post_date);
-					$feed_object->set_date($post_date);
-					$feed_object->set_title($post->post_title);
-
-					$feed_object->set_text($post_text);
-
-					$this->feeds[] = $feed_object;
 
 				}
-
-			}
 
 			}
 
 
 			//Set the cache
-			$this->set_cache();
+			//$this->set_cache();
 
 			$this_json = json_encode($this);
 
@@ -443,14 +444,14 @@ if( class_exists('BuzzFeed') ) {
 				"naam" => NULL,
 				"sort" => "ASC",
 				'wordpress'        => array(),
-			);
+				);
 
 
 			$this->feeds_collection = new BuzzFeedWordpress_collection();
 			$this->feeds_collection->set_type($this->slug);
 
 			// Construct the parent()
-	    	parent::__construct();
+			parent::__construct();
 
 		}
 
@@ -467,7 +468,9 @@ if( class_exists('BuzzFeed') ) {
 
 		function get_feeds($arguments) {
 
-
+			//print_r($arguments);
+			//echo "-----------------------------------------------------------------------";
+			//print_r($arguments);
 			// // defaults
 			$nr_of_feeds = $this->settings['nr_of_feeds'];
 			$source      = $this->settings['default_source'];
@@ -492,12 +495,15 @@ if( class_exists('BuzzFeed') ) {
 			if (isset($arguments['afdeling'])) { $afdeling = $arguments['afdeling']; }
 			if (isset($arguments['naam'])) { $naam = $arguments['naam']; }
 			if (isset($arguments['sort'])) { $sort = $arguments['sort']; }
-
-
+			
+			// reset the feed before import to clean up the content of the feeds array.
+			// somehow this was a problem resulting in many 'melding' type of posts in the feed
+			$this->feeds_collection->feeds = []; 
 			$this->feeds_collection->import($this->settings['wordpress'],$source, $nr_of_feeds,0,0,5,$startdate,$enddate,$offset,$types, $regio, $afdeling,$naam,$sort);
 
 			//$this->feeds_collection->sort_feeds();
-
+			//print_r("!COLLECTION: \n");
+			//p//rint_r($this->feeds_collection->feeds);
 			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
 			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
 
