@@ -1,0 +1,31 @@
+data:
+  image: busybox
+  volumes:
+    - /var/www/html
+    - /var/lib/mysql
+web:
+    build: .
+    links:
+      - mysql
+    environment:
+      DB_NAME: wordpress
+      WORDPRESS_DB_PASSWORD: password
+    ports:
+      - 8080:80
+      - 443:443
+    volumes:
+      - ./data:/data
+      - ./wp-content/themes:/var/www/html/wp-content/themes
+      - ./wp-content/uploads:/var/www/html/wp-content/uploads
+      - ./wp-content/plugins:/var/www/html/wp-content/plugins
+    volumes_from:
+      - data
+mysql:
+    image: mysql:5.7
+    ports:
+      - localhost:3306:3306
+    volumes_from:
+      - data
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress

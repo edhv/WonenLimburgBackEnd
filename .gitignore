@@ -1,0 +1,77 @@
+# This is a template .gitignore file for git-managed WordPress projects.
+#
+# Fact: you don't want WordPress core files, or your server-specific
+# configuration files etc., in your project's repository. You just don't.
+#
+# Solution: stick this file up your repository root (which it assumes is
+# also the WordPress root directory) and add exceptions for any plugins,
+# themes, and other directories that should be under version control.
+#
+# See the comments below for more info on how to add exceptions for your
+# content. Or see git's documentation for more info on .gitignore files:
+# http://kernel.org/pub/software/scm/git/docs/gitignore.html
+ 
+# --------------------
+# OSX Files
+# --------------------
+
+# File system junk files
+Desktop.ini
+Thumbs.db
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+.apdisk
+.fseventsd
+
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+*.sublime-*
+*.swp
+.c9
+.sass-cache/
+
+.sass-cache
+.sass-cache/*
+
+npm-debug.log
+
+# Dev tools
+node_modules
+
+
+# Ignore everything in the root except the "wp-content" directory.
+ 
+# Ignore everything in the "wp-content" directory, except the "plugins"
+# and "themes" directories.
+wp-content/*
+!wp-content/plugins/
+!wp-content/themes/
+ 
+# Ignore everything in the "plugins" directory, except the plugins you
+# specify (see the commented-out examples for hints on how to do this.)
+wp-content/plugins/*
+!wp-content/plugins/buzzapi
+!wp-content/plugins/buzzfeed_all
+!wp-content/plugins/buzzfeed_facebook
+!wp-content/plugins/buzzfeed_instagram
+!wp-content/plugins/buzzfeed_linkedin
+!wp-content/plugins/buzzfeed_socialmedia
+!wp-content/plugins/buzzfeed_twitter
+!wp-content/plugins/buzzfeed_wordpress
+!wp-content/plugins/buzzfeed_youtube
+
+
+
+
+# Ignore everything in the "themes" directory, except the themes you
+# specify (see the commented-out example for a hint on how to do this.)
+wp-content/themes/*
+!wp-content/themes/WonenLimburgApp theme

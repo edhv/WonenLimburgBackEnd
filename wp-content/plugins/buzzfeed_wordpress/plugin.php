@@ -1,0 +1,518 @@
+<?php
+
+/*
+Plugin Name: Buzzfeed Wordpress
+Plugin URI:
+Description: Get wordpress feed
+Author: Ties Kuypers, global structure by Jeroen Braspenning
+Author URI:
+Version: 1.0
+Text Domain:
+License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+*/
+
+
+/* ------------------------------------------------------------------------ */
+if( class_exists('BuzzFeed_object') ) {
+
+	class BuzzFeedWordpress_object extends BuzzFeed_object {
+
+		// Setters overwrite
+
+
+	}
+
+}
+
+
+
+
+
+
+/* ------------------------------------------------------------------------ */
+
+if( class_exists('BuzzFeed_collection') ) {
+
+
+	class BuzzFeedWordpress_collection extends BuzzFeed_collection {
+
+		/* GETTERS ------------------ */
+
+		/* Get wordpress feed */
+		function import($settings, $source, $nr_of_feeds, $lat = NULL, $long = NULL, $radius = 5, $startdate, $enddate,$offset=NULL, $types = array(), $regio = array(), $afdeling=NULL,$naam=NULL,$sort=NULL )
+		{
+
+			// Cache the data
+			if($this->has_cache == TRUE)
+			return;
+
+
+
+			if ($source=='kalender'){
+
+			$args     = array(
+
+					  	    'post_type' =>	$source,
+							'meta_key'	=>	'begin_tijd',
+							'orderby'	=>	'meta_value',
+							'order'		=>	'ASC',
+
+						  	'meta_query' => array(
+		        								array(
+									            'key' => 'begin_tijd',
+									            'compare' => '>=',
+									            'value'   => $startdate,
+									            ),
+
+									          	array(
+									            'key'     => 'eind_tijd',
+									            'compare' => '<=',
+									            'value'   => $enddate,
+										        ),
+        								),
+							  );
+						}
+
+			else if($source=='jaarverslagdetail'){
+			$args     = array(
+
+			  	    'post_type' =>	'jaarverslag',
+					'meta_key'	=>	'edition',
+					'orderby'	=>	'meta_value',
+					'order'		=>	'ASC',
+				  	'meta_query' => array(
+					            'key' => 'edition',
+					            'compare' => 'LIKE',
+					            'value'   => $startdate
+					            ),
+					  	);
+			}
+
+			else if($source=='wieiswie'){
+				$args     = array(
+
+			  	    'post_type' =>	$source,
+					'orderby'	=>	'post_title',
+					'order'		=>	$sort,
+
+
+					  	);
+
+				if(!empty($afdeling)){
+					$add = array(
+						'meta_key' => 'afdeling',
+						'meta_query' => array(
+					    'key' => 'afdeling',
+					    'compare' => 'LIKE',
+					    'value'   => $afdeling,
+					            ),);
+
+					$args = array_merge($args,$add);
+
+				}
+
+				if(!empty($naam)){
+					$add = array(
+						'search_name' => $naam
+					);
+
+					$args = array_merge($args,$add);
+
+				}
+
+				if(!empty($regio)){
+					$add = array(
+						'meta_key' => 'regio',
+						'meta_query' => array(
+					    'key' => 'regio',
+					    'compare' => 'IN',
+					    'value'   => $regio,
+					            ),);
+
+					$args = array_merge($args,$add);
+
+				}
+
+			}
+
+			else if($source=='boekenkast' || $source=='huurdersraad' || $source=='koopenwoon' || $source=='werkenbij' )
+			{
+
+				$args =  array(
+							  	'post_type' =>	'home'
+
+							  );
+
+				$this->total = 1;
+			}
+
+			else{
+
+			$args     = array(
+							  	'post_type' =>	$source
+
+							  );
+			}
+
+			$query    = new WP_Query($args);
+
+
+			$this->total	=	(int)$query->found_posts;
+
+			// loop trough the posts
+
+			if( $query->have_posts() )
+			{
+
+
+
+			if($source=='boekenkast' || $source=='huurdersraad' || $source=='koopenwoon' || $source=='werkenbij' ){
+
+				$feed_object = new BuzzFeedWordpress_object();
+
+				switch ($source) {
+					case 'boekenkast':
+
+						$page = get_page_by_title('boekenkast','OBJECT','home');
+						$photo_url = get_field('img',$page->ID);
+						$feed_object->set_media($photo_url['sizes']['large-thumb']);
+						$feed_object->set_url('http://maatschappelijkekaart.wonenlimburg.nl/project/het-bruishuis/');//http://wonenlimburg.nl/');
+						$feed_object->set_type('boekenkast');
+						$feed_object->set_feed_id('1111');
+						$feed_object->set_timestamp(time());
+						$feed_object->set_date(time());
+						$feed_object->set_title('boekenkast');
+
+						$feed_object->set_text('boekenkast');
+
+						$this->feeds[] = $feed_object;
+						break;
+
+					case 'huurdersraad':
+
+						$page = get_page_by_title('huurdersraad','OBJECT','home');
+						$photo_url = get_field('img',$page->ID);
+						$feed_object->set_media($photo_url['sizes']['large-thumb']);
+						$feed_object->set_url('http://huurdersraad-wl.nl/kj3/');//http://www.hv-nl.nl/');
+						$feed_object->set_type('huurdersraad');
+						$feed_object->set_feed_id('2222');
+						$feed_object->set_timestamp(time());
+						$feed_object->set_date(time());
+						$feed_object->set_title('huurdersraad');
+
+						$feed_object->set_text('huurdersraad');
+
+						$this->feeds[] = $feed_object;
+						break;
+
+					case 'koopenwoon':
+
+						$page = get_page_by_title('koopenwoon','OBJECT','home');
+						$photo_url = get_field('img',$page->ID);
+						$feed_object->set_media($photo_url['sizes']['large-thumb']);
+						$feed_object->set_url('http://www.koop-en-woon.nl/');
+						$feed_object->set_type('koopenwoon');
+						$feed_object->set_feed_id('3333');
+						$feed_object->set_timestamp(time());
+						$feed_object->set_date(time());
+						$feed_object->set_title('koopenwoon');
+
+						$feed_object->set_text('koopenwoon');
+
+						$this->feeds[] = $feed_object;
+						break;
+
+					case 'werkenbij':
+
+						$page = get_page_by_title('werkenbij','OBJECT','home');
+						$photo_url = get_field('img',$page->ID);
+						$feed_object->set_media($photo_url['sizes']['large-thumb']);
+						$feed_object->set_url('http://werkenbijwonenlimburg.nl/');
+						$feed_object->set_type('werkenbij');
+						$feed_object->set_feed_id('4444');
+						$feed_object->set_timestamp(time());
+						$feed_object->set_date(time());
+						$feed_object->set_title('werkenbij');
+
+						$feed_object->set_text('werkenbij');
+
+						$this->feeds[] = $feed_object;
+						break;
+
+					default:
+						# code...
+						break;
+				}
+
+			}
+
+			else if($source=='kalender' || $source=='meldingen' || $source=='wieiswie' || $source=='brochure' || $source=='buurtvan' || $source=='bericht' || $source=='jaarverslag' ){
+
+				foreach($query->posts as $post)
+				{
+
+				    // get the post data
+					$post_id    = $post->ID;
+
+					$post_url   = get_field('url', $post_id);
+
+					// Compose object
+					$feed_object = new BuzzFeedWordpress_object();
+					$post_date = strtotime($post->post_date);
+
+					$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'photo', true));
+
+					$feed_object->set_url($post_url);
+
+					if($source=="kalender" || $source=="meldingen"){
+
+						$post_date = get_post_meta($post_id, 'begin_tijd', true);
+						$feed_object->set_starttimedate(get_post_meta($post_id, 'begin_tijd', true));
+						$feed_object->set_endtimedate(get_post_meta($post_id, 'eind_tijd', true));
+
+						if($source=="kalender"){
+
+							$feed_object->set_contact_mail(get_post_meta($post_id, 'contact_email', true));
+							$feed_object->set_contact_tel(get_post_meta($post_id, 'contact_tel', true));
+							$feed_object->set_contact_url(str_replace('http://www.','',get_post_meta($post_id, 'contact_website', true)));
+
+							$location = get_post_meta($post_id, 'locatie_map', true);
+							$feed_object->set_locatie($location['address']);
+							$feed_object->set_lat($location['lat']);
+							$feed_object->set_long($location['lng']);
+						}
+
+						else if($source=="meldingen"){
+						$post->post_type='melding';
+						$post->post_content = get_field('beschrijving',$post_id);
+						$feed_object->set_colour_code(get_post_meta($post_id, 'status', true));
+						}
+					}
+
+
+					else if($source=="wieiswie"){
+						$formatted_telnr = get_post_meta($post_id, 'persoon_telnr', true);
+						$length = strlen($formatted_telnr);
+
+					  if($length == 10) {
+					  	$formatted_telnr = preg_replace("/^1?(\d{3})(\d{4})(\d{3})$/", "$1-$2 $3", $formatted_telnr);
+					  }
+
+						$feed_object->set_wieiswie_mail(get_post_meta($post_id, 'persoon_email', true));
+						//$feed_object->set_wieiswie_tel(get_post_meta($post_id, 'persoon_telnr', true));
+						$feed_object->set_wieiswie_tel($formatted_telnr);
+						$feed_object->set_wieiswie_regio(get_post_meta($post_id, 'regio', true));
+						$feed_object->set_wieiswie_afdeling(get_post_meta($post_id, 'afdeling', true));
+					}
+
+
+
+					else if($source=="brochure" || $source=="buurtvan"){
+						$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'cover_img', true));
+						$pdf_link = wp_get_attachment_url(get_post_meta($post_id, 'pdf_link', true));
+						$feed_object->set_pdf_link($pdf_link);
+
+						if ($source=="buurtvan"){
+							$feed_object->set_colour_code(get_post_meta($post_id, 'colourcode', true));
+							$feed_object->set_quote(get_post_meta($post_id, 'quote', true));
+
+						}
+					}
+
+					else if ($source=="jaarverslag"){
+
+						$post->post_type='jaarverslag';
+						$page = get_page_by_title('jaarverslag','OBJECT','home');
+						$feed_object->set_starttimedate(get_post_meta($post_id, 'edition', true));
+						$photo_url = get_field('img',$page->ID);
+						$photo_url = $photo_url['sizes']['large-thumb'];
+					}
+
+					else if($source=="bericht")
+					{
+						$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'bericht_img', true));
+						$post->post_content = get_field('bericht_text',$post_id);
+						$post->post_type = get_field('bericht_type',$post_id)."bericht";
+
+					}
+
+					$feed_object->set_media($photo_url);
+
+					$feed_object->set_type($post->post_type);
+					$feed_object->set_feed_id($post_id);
+					$feed_object->set_timestamp($post_date);
+					$feed_object->set_date($post_date);
+					$feed_object->set_title($post->post_title);
+
+					$feed_object->set_text($post->post_content);
+
+					$this->feeds[] = $feed_object;
+				}
+			}
+
+			elseif($source=='jaarverslagdetail'){
+
+				$post = $query->posts[0];
+				$post_id = $post->ID;
+
+				$post_date = strtotime($post->post_date);
+
+				$paginas = get_field('layout',$post_id);
+
+				$this->total	=	count($paginas);
+
+				foreach($paginas as $pagina){
+
+				$feed_object = new BuzzFeedWordpress_object();
+
+					if($pagina['acf_fc_layout']=='layout_text'){
+
+						$post_type = 'text';
+						$photo_url='';
+						$post_text= $pagina['text'];
+					}
+
+					elseif($pagina['acf_fc_layout']=='layout_img'){
+
+						$post_type = 'img';
+						$photo_url= $pagina['img']['sizes']['large'];
+						$post_text= '';
+					}
+
+					$feed_object->set_media($photo_url);
+
+					$feed_object->set_type($post_type);
+					$feed_object->set_feed_id($post_id);
+					$feed_object->set_timestamp($post_date);
+					$feed_object->set_date($post_date);
+					$feed_object->set_title($post->post_title);
+
+					$feed_object->set_text($post_text);
+
+					$this->feeds[] = $feed_object;
+
+				}
+
+			}
+
+			}
+
+
+			//Set the cache
+			$this->set_cache();
+
+			$this_json = json_encode($this);
+
+		}
+
+	}
+}
+
+
+
+
+
+
+/* ------------------------------------------------------------------------ */
+
+if( class_exists('BuzzFeed') ) {
+
+
+	class BuzzFeedWordpress extends BuzzFeed {
+
+
+		function __construct()
+		{
+
+
+			// Basic
+			$this->slug  = "wordpress";
+			$this->label = "wordpress";
+			$currenttime = strtotime('today');
+
+			// Settings
+			$this->settings = array(
+				"nr_of_feeds"    => 20,
+				"default_source" => "buurtvan",
+				"startdate" => $currenttime,
+				"enddate" => 32503680000,
+				"offset" => 0,
+				"types" => NULL,
+				"regio" => null,
+				"afdeling" => null,
+				"naam" => NULL,
+				"sort" => "ASC",
+				'wordpress'        => array(),
+			);
+
+
+			$this->feeds_collection = new BuzzFeedWordpress_collection();
+			$this->feeds_collection->set_type($this->slug);
+
+			// Construct the parent()
+	    	parent::__construct();
+
+		}
+
+
+
+		function register_filters() {
+
+			// Add filter here to connect the api to channel functions
+			// ie. add_filter($this->slug."/get_feeds", array($this,"import_user_feed"), 1,2);
+			add_filter($this->slug."/get_feeds", array($this,"get_feeds"), 1,2);
+		}
+
+
+
+		function get_feeds($arguments) {
+
+
+			// // defaults
+			$nr_of_feeds = $this->settings['nr_of_feeds'];
+			$source      = $this->settings['default_source'];
+			$startdate   = $this->settings['startdate'];
+			$enddate     = $this->settings['enddate'];
+			$offset     = $this->settings['offset'];
+			$types		= $this->settings['types'];
+			$regio		= $this->settings['regio'];
+			$afdeling	= $this->settings['afdeling'];
+			$naam		= $this->settings['naam'];
+			$sort		= $this->settings['sort'];
+
+
+			// overwrite defaults
+			if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']; }
+			if (isset($arguments['source'])) { $source = $arguments['source']; }
+			if (isset($arguments['startdate'])) { $startdate = $arguments['startdate']; }
+			if (isset($arguments['enddate'])) { $enddate = $arguments['enddate']; }
+			if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
+			if (isset($arguments['types'])) { $types = $arguments['types']; $types = explode(",",$types); }
+			if (isset($arguments['regio'])) { $regio = $arguments['regio']; $regio = explode(",",$regio); }
+			if (isset($arguments['afdeling'])) { $afdeling = $arguments['afdeling']; }
+			if (isset($arguments['naam'])) { $naam = $arguments['naam']; }
+			if (isset($arguments['sort'])) { $sort = $arguments['sort']; }
+
+
+			$this->feeds_collection->import($this->settings['wordpress'],$source, $nr_of_feeds,0,0,5,$startdate,$enddate,$offset,$types, $regio, $afdeling,$naam,$sort);
+
+			//$this->feeds_collection->sort_feeds();
+
+			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
+			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
+
+			// Return status and response
+			return array("status_code" => 1,"totalamount" => $this->feeds_collection->total , "response" => $this->feeds_collection->feeds);
+
+
+		}
+
+
+	}
+
+	new BuzzFeedWordpress();
+
+}
+
+
+?>
