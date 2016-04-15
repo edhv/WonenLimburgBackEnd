@@ -35,19 +35,25 @@ class BuzzFeed_collection {
 
 	private $v = 1;
 
-	function has_cache($name) {
-		$cache = get_transient($name);
-		if($cache !== FALSE) {
-			return true;
-		}
+	/** Checks if there is a cache whi*/
+	function has_cache($name = '') {
 
-		return false;
+		$cache_name = ($name != '') ? $name : sha1(strtolower($_SERVER['REQUEST_URI'])).'-'.$this->v;
+
+		//Return the transient
+		$cache = get_transient($cache_name);
+
+		if ($cache) {
+			return true;
+		} else {
+			return false;
+		}
 
 	}
 
 	/* Cache the data */
 	function fetch_cache($name =  '')
-	{
+	{	
 		//Get the cache name
 		$cache_name = ($name != '') ? $name : sha1(strtolower($_SERVER['REQUEST_URI'])).'-'.$this->v;
 		
@@ -71,15 +77,24 @@ class BuzzFeed_collection {
 		$cache_name = ($name != '') ? $name : sha1(strtolower($_SERVER['REQUEST_URI'])).'-'.$this->v;
 
 		//Serialize the data
-		
+		if (count($this->feeds) <= 0) {
+			return;
+		}
+
 		$data[0] = $this->feeds;
 		$data[1] = $this->total;
 		$data_encoded = $data;
-		
+
 		//Set the cache
 		set_transient($cache_name, $data_encoded, ($time*60));
 		
 						
+	}
+
+	function delete_cache($name = '') {
+		$cache_name = ($name != '') ? $name : sha1(strtolower($_SERVER['REQUEST_URI'])).'-'.$this->v;
+		delete_transient( $cache_name );
+
 	}
 
 

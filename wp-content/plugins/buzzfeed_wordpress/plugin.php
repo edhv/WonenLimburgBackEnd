@@ -36,16 +36,38 @@ if( class_exists('BuzzFeed_collection') ) {
 
 	class BuzzFeedWordpress_collection extends BuzzFeed_collection {
 
+
+
+		function __construct()
+		{
+
+			add_action( 'save_post', array($this,"on_post_save"),10,1);
+
+			// Construct the parent()
+	    	//parent::__construct();
+
+		}
+
+
+
+		// setup a hook that on a post save the cache is emptied
+		function on_post_save( $post_id ) {
+
+			// if the saved post is found inside the post types array, reset the cache
+			delete_transient('buzzapicache/'.get_post_type($post_id));
+			
+		}
+
 		/* GETTERS ------------------ */
 
 		/* Get wordpress feed */
 		function import($settings, $source, $nr_of_feeds, $lat = NULL, $long = NULL, $radius = 5, $startdate, $enddate,$offset=NULL, $types = array(), $regio = array(), $afdeling=NULL,$naam=NULL,$sort=NULL )
 		{
 
-			// Cache the data
-			//if($this->has_cache == TRUE)
-			//return;
-
+			if ($this->has_cache('buzzapicache/'.$source)) {
+				$this->fetch_cache('buzzapicache/'.$source);
+				return;
+			}
 
 			if ($source=='kalender'){
 
@@ -92,9 +114,7 @@ if( class_exists('BuzzFeed_collection') ) {
 
 					'post_type' =>	$source,
 					'orderby'	=>	'post_title',
-					'order'		=>	$sort,
-
-
+					'order'		=>	$sort
 					);
 
 				if(!empty($afdeling)){
@@ -153,8 +173,11 @@ if( class_exists('BuzzFeed_collection') ) {
 					);
 			}
 
+			// set the posts per page
+			$args['posts_per_page'] = -1; // set an infinite nr of posts per page
+			
 			$query = new WP_Query($args);
-
+			//print_r($args);
 
 			$this->total = (int)$query->found_posts;
 
@@ -400,7 +423,7 @@ if( class_exists('BuzzFeed_collection') ) {
 
 
 			//Set the cache
-			//$this->set_cache();
+			$this->set_cache('buzzapicache/'.$source, 60*60);
 
 			$this_json = json_encode($this);
 
@@ -499,11 +522,13 @@ if( class_exists('BuzzFeed') ) {
 			// reset the feed before import to clean up the content of the feeds array.
 			// somehow this was a problem resulting in many 'melding' type of posts in the feed
 			$this->feeds_collection->feeds = []; 
+
 			$this->feeds_collection->import($this->settings['wordpress'],$source, $nr_of_feeds,0,0,5,$startdate,$enddate,$offset,$types, $regio, $afdeling,$naam,$sort);
 
 			//$this->feeds_collection->sort_feeds();
 			//print_r("!COLLECTION: \n");
-			//p//rint_r($this->feeds_collection->feeds);
+			// print_r(count($this->feeds_collection->feeds));
+			// print_r($this->feeds_collection->feeds);
 			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
 			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
 
