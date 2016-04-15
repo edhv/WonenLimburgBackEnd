@@ -64,7 +64,8 @@ if( class_exists('BuzzFeed_collection') ) {
 		function import($settings, $source, $nr_of_feeds, $lat = NULL, $long = NULL, $radius = 5, $startdate, $enddate,$offset=NULL, $types = array(), $regio = array(), $afdeling=NULL,$naam=NULL,$sort=NULL )
 		{
 
-			if ($this->has_cache('buzzapicache/'.$source)) {
+			// check if there is a cache, but also ignore the cache when the 'no_cache' param is set
+			if ($this->has_cache('buzzapicache/'.$source) && !isset($_GET['no_cache'])) {
 				$this->fetch_cache('buzzapicache/'.$source);
 				return;
 			}
@@ -92,6 +93,31 @@ if( class_exists('BuzzFeed_collection') ) {
 							),
 						),
 					);
+
+				// the used acf plugin was faulty, replaced with the default datepicker
+				// therefore the date needed to be converted from timestamp to yymmdd
+				
+				// $args     = array(
+
+				// 	'post_type' =>	$source,
+				// 	'meta_key'	=>	'begin_tijd',
+				// 	'orderby'	=>	'meta_value',
+				// 	'order'		=>	'ASC',
+
+				// 	'meta_query' => array(
+				// 		array(
+				// 			'key' => 'begin_tijd',
+				// 			'compare' => '>=',
+				// 			'value'   => strftime("%Y%m%d",$startdate),
+				// 			),
+
+				// 		array(
+				// 			'key'     => 'eind_tijd',
+				// 			'compare' => '<=',
+				// 			'value'   => strftime("%Y%m%d",$enddate),
+				// 			),
+				// 		),
+				// 	);
 			}
 
 			else if($source=='jaarverslagdetail'){
@@ -175,7 +201,7 @@ if( class_exists('BuzzFeed_collection') ) {
 
 			// set the posts per page
 			$args['posts_per_page'] = -1; // set an infinite nr of posts per page
-			
+
 			$query = new WP_Query($args);
 			//print_r($args);
 
@@ -287,10 +313,9 @@ if( class_exists('BuzzFeed_collection') ) {
 						$feed_object->set_url($post_url);
 
 						if($source=="kalender" || $source=="meldingen"){
-
-							$post_date = get_post_meta($post_id, 'begin_tijd', true);
-							$feed_object->set_starttimedate(get_post_meta($post_id, 'begin_tijd', true));
-							$feed_object->set_endtimedate(get_post_meta($post_id, 'eind_tijd', true));
+							$post_date = get_field('begin_tijd', $post_id, false);
+							$feed_object->set_starttimedate(get_field('begin_tijd', $post_id, false));
+							$feed_object->set_endtimedate(get_field('eind_tijd', $post_id, false));
 
 							if($source=="kalender"){
 
@@ -326,6 +351,14 @@ if( class_exists('BuzzFeed_collection') ) {
 							$feed_object->set_wieiswie_tel($formatted_telnr);
 							$feed_object->set_wieiswie_regio(get_post_meta($post_id, 'regio', true));
 							$feed_object->set_wieiswie_afdeling(get_post_meta($post_id, 'afdeling', true));
+
+							// changed the system to use thumbs
+							$photo_url = get_field('photo',$post_id);
+							if (isset($photo_url['sizes'])) {
+								$photo_url = $photo_url['sizes']['large-thumb'];
+							}
+	
+							
 						}
 
 
@@ -420,7 +453,6 @@ if( class_exists('BuzzFeed_collection') ) {
 				}
 
 			}
-
 
 			//Set the cache
 			$this->set_cache('buzzapicache/'.$source, 60*60);
