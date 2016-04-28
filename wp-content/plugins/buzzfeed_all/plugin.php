@@ -6,7 +6,7 @@ Plugin URI:
 Description: Get all feeds
 Author: Ties Kuypers, global structure by Jeroen Braspenning
 Author URI: 
-Version: 1.0
+Version: 1.0.1
 Text Domain: 
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
@@ -402,7 +402,7 @@ if( class_exists('BuzzFeed_collection') ) {
 						$result = apply_filters($items[0]."/get_feeds", array(
 							"nr_of_feeds"=>$items[3]
 						));
-				
+						$this->unsortedFeeds[] = $result;
 						//Add the result
 
 					} else if ($items[0] === "rss") {
@@ -411,10 +411,10 @@ if( class_exists('BuzzFeed_collection') ) {
 							"source"=>$items[2],
 							"nr_of_feeds"=>$items[3]
 						));
-
+						$this->unsortedFeeds[] = $result;
 					}
 
-					$this->unsortedFeeds[] = $result;
+				
 
 				}
 				
