@@ -49,7 +49,7 @@ if( class_exists('BuzzFeed_collection') ) {
 	
 			//array('youtube', 'user', 'UCoP_KWmDZo8I4xeotYYGAmg', '1'),
 			array('socialmedia', '', '', '1'),
-			array('wordpress', 'tag', 'bericht', '1'),
+			array('rss', 'tag', 'nieuws', '1'),
 			array('wordpress', 'tag', 'wieiswie', '1'),
 	        array('wordpress', 'tag', 'kalender', '6'),
 	        array('wordpress', 'tag', 'brochure', '1'),
@@ -230,10 +230,10 @@ if( class_exists('BuzzFeed_collection') ) {
 			//$use_cache = (isset($_GET['use_cache'])) ? TRUE : FALSE;
 				
 
-			if ($this->has_cache('all_feeds')) {
-				$this->fetch_cache('all_feeds');
-				return;
-			}
+			// if ($this->has_cache('all_feeds')) {
+			// 	$this->fetch_cache('all_feeds');
+			// 	return;
+			// }
 
 			//Loop trough the feeds\
 			$feeds = array();
@@ -312,15 +312,27 @@ if( class_exists('BuzzFeed_collection') ) {
 
 			}
 
-			
+
+
+			// rss feeds, add rss feeds
+			foreach ($types as $type) {
+
+				foreach ($this->feed_array as $feed) {
+
+					if ($feed[0] === 'rss' && $feed[2] === $type) {
+						$feeds[] = $feed;
+					} 
+				}
+			}
+
+
+
 			$this->total = count($types)-2;
 
 
-	
 			foreach($feeds as $items)
 			{	
-			
-			
+				
 				if($items[0]=='wordpress'){
 			
 					
@@ -356,8 +368,6 @@ if( class_exists('BuzzFeed_collection') ) {
 				else {
 
 					if(in_array($items[0],$types)){
-
-
 						/*
 						$url = call_user_func_array('self::get_source_url', $items); //$this->get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type, $lat, $long, $radius);
 
@@ -371,16 +381,24 @@ if( class_exists('BuzzFeed_collection') ) {
 						//Add the result
 						$this->feeds[] = $result;
 						*/
-
 						//replaced the expensive curl with the call of a simple hook
 						$result = apply_filters($items[0]."/get_feeds", array(
 							"nr_of_feeds"=>$items[3]
 						));
 				
 						//Add the result
-						$this->feeds[] = $result;
+
+					} else if ($items[0] === "rss") {
+						//print_r($items);
+						$result = apply_filters($items[0]."/get_feeds", array(
+							"type"=>$items[2],
+							"nr_of_feeds"=>$items[3]
+						));
 
 					}
+
+					$this->feeds[] = $result;
+
 				}
 				
 			}

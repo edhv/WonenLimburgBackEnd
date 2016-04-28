@@ -36,6 +36,39 @@ if( class_exists('BuzzFeed_collection') ) {
 
 
 		/* GETTERS ------------------ */
+		function import( $settings, $type, $nr_of_feeds, $offset=NULL ) {
+
+			$rssFeed = $settings['feeds'][$type];
+
+			$feedObject = implode(file($rssFeed));
+			$xmlObject = simplexml_load_string($feedObject, null, LIBXML_NOCDATA);
+			$json = json_encode($xmlObject);
+			$rssArray = json_decode($json,TRUE);
+
+			$items = $rssArray['channel']['item'];
+
+			// walk through the rss items
+			foreach ($items as $index => $rssItem) {
+
+				$feed_object = new BuzzFeedRss_object();
+
+				$feed_object->set_type($type);
+				$feed_object->set_feed_id($rssItem['guid']);
+				$feed_object->set_timestamp(strtotime($rssItem['pubDate']));
+				//$feed_object->set_date($date);
+				$feed_object->set_title($rssItem['title']);
+				$feed_object->set_text($rssItem['description']);
+				//$feed_object->set_media($media);
+				$feed_object->set_url('https://twitter.com/wonenlimburg/status/'.$source_url);
+
+				$this->feeds[] = $feed_object;
+
+			}
+
+			$this->total = count($items);
+			$this_json = json_encode($this);
+
+		}
 
 
 
@@ -65,7 +98,12 @@ if( class_exists('BuzzFeed') ) {
 			// Settings
 			$this->settings = array(
 
+				"feeds" => array(
+					"nieuws" => "https://www.wonenlimburg.nl/rss.jsp?objectid=49d13a26-e6ff-4b9b-b3aa-7e32b8fefb76",
+				)
+
 			);
+
 
 			$this->feeds_collection = new BuzzFeedRss_collection(); 
 			$this->feeds_collection->set_type($this->slug);
@@ -87,26 +125,38 @@ if( class_exists('BuzzFeed') ) {
 
 
 		function get_feeds($arguments) {
-
-			echo "get feeds rss";
-			die();
-
 			// // defaults
-			// $nr_of_feeds = 40;
+			$nr_of_feeds = 40;
+
 			// $source      = "wonenlimburg";
 			// $lat         = NULL;
 			// $long        = NULL;
 			// $radius      = 5;
-			// $offset     = NULL;
+			$offset     = NULL;
+
+			$type = $arguments['type'];
 			// $types		= NULL;
 			// $regio		= NULL;
 			// $afdeling	= NULL;
 			// $naam		= NULL;
 			// $sort		= NULL;
 			// // overwrite defaults
-			// if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']; }
+			if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']; }
 			// if (isset($arguments['source'])) { $source = $arguments['source']; }
-			// if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
+			if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
+			if (isset($arguments['type'])) { $offset = $arguments['offset']; }
+
+		//	echo $type;
+          $this->feeds_collection->feeds = [];
+
+			$this->feeds_collection->import($this->settings, $type, $nr_of_feeds, $offset );
+			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
+			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
+			//print_r($this->feeds_collection->feeds);
+			// Return status and response
+			return array("status_code"=>1,"totalamount"=>$this->feeds_collection->total,"response"=>$this->feeds_collection->feeds);
+
+
 
 			
 			// // overwrite geo defaults
@@ -122,7 +172,6 @@ if( class_exists('BuzzFeed') ) {
 			// if (isset($arguments['radius'])) { $radius = $arguments['radius']; }
 
 
-			// $this->feeds_collection->import($this->settings["twitter"], $source, $nr_of_feeds , $lat, $long, $radius,0,0,$offset,$types,$regio,$afdeling,$naam,$sort);
 
 
 			// $this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
