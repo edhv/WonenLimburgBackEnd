@@ -38,6 +38,8 @@ if( class_exists('BuzzFeed_collection') ) {
 		/* GETTERS ------------------ */
 		function import( $settings, $type, $nr_of_feeds, $offset=NULL ) {
 
+
+			// retrieve rss data
 			$rssFeed = $settings['feeds'][$type];
 
 			$feedObject = implode(file($rssFeed));
@@ -66,7 +68,15 @@ if( class_exists('BuzzFeed_collection') ) {
 			}
 
 			$this->total = count($items);
+
+			//Set the cache
+			$this->set_cache();
+
 			$this_json = json_encode($this);
+
+		
+			
+			
 
 		}
 
@@ -125,7 +135,7 @@ if( class_exists('BuzzFeed') ) {
 
 
 		function get_feeds($arguments) {
-			
+
 			// // defaults
 			$offset = $arguments['offset'] || 0;
 			$type = $arguments['source'];
@@ -134,42 +144,20 @@ if( class_exists('BuzzFeed') ) {
 			if ($arguments['offset']) { $offset = $arguments['offset']; }
 			if ($arguments['nr_of_feeds']) { $nr_of_feeds = $arguments['nr_of_feeds']; }
 
-		//	echo $type;
-          	$this->feeds_collection->feeds = [];
-
-			$this->feeds_collection->import($this->settings, $type, $nr_of_feeds, $offset );
+			// if the system is cached, don't re import
+          	if(!$this->feeds_collection->has_cache) {
+          		$this->feeds_collection->import($this->settings, $type, $nr_of_feeds, $offset );
+          	}
+          	
 			$this->feeds_collection->sort_feeds();
-
 			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
 			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
-			//print_r($this->feeds_collection->feeds);
+
 			// Return status and response
 			return array("status_code"=>1,"totalamount"=>$this->feeds_collection->total,"response"=>$this->feeds_collection->feeds);
 
 
 
-			
-			// // overwrite geo defaults
-			// if (isset($arguments['geo']))
-			// {
-			// 	$geo  = explode(',', $arguments['geo']);
-			// 	if(count($geo) >= 2)
-			// 	{
-			// 		$lat  = $geo[0];
-			// 		$long = $geo[1];	
-			// 	}
-			// }
-			// if (isset($arguments['radius'])) { $radius = $arguments['radius']; }
-
-
-
-
-			// $this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
-			
-			// $this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
-
-			// // Return status and response
-			// return array("status_code"=>1,"totalamount"=>$this->feeds_collection->total,"response"=>$this->feeds_collection->feeds);
 
 		}
 
