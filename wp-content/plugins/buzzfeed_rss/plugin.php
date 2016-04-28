@@ -55,7 +55,7 @@ if( class_exists('BuzzFeed_collection') ) {
 				$feed_object->set_type($type);
 				$feed_object->set_feed_id($rssItem['guid']);
 				$feed_object->set_timestamp(strtotime($rssItem['pubDate']));
-				//$feed_object->set_date($date);
+				$feed_object->set_date(strtotime($rssItem['pubDate']));
 				$feed_object->set_title($rssItem['title']);
 				$feed_object->set_text($rssItem['description']);
 				//$feed_object->set_media($media);
@@ -125,31 +125,21 @@ if( class_exists('BuzzFeed') ) {
 
 
 		function get_feeds($arguments) {
+			
 			// // defaults
+			$offset = $arguments['offset'] || 0;
+			$type = $arguments['source'];
 			$nr_of_feeds = 40;
 
-			// $source      = "wonenlimburg";
-			// $lat         = NULL;
-			// $long        = NULL;
-			// $radius      = 5;
-			$offset     = NULL;
-
-			$type = $arguments['type'];
-			// $types		= NULL;
-			// $regio		= NULL;
-			// $afdeling	= NULL;
-			// $naam		= NULL;
-			// $sort		= NULL;
-			// // overwrite defaults
-			if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']; }
-			// if (isset($arguments['source'])) { $source = $arguments['source']; }
-			if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
-			if (isset($arguments['type'])) { $offset = $arguments['offset']; }
+			if ($arguments['offset']) { $offset = $arguments['offset']; }
+			if ($arguments['nr_of_feeds']) { $nr_of_feeds = $arguments['nr_of_feeds']; }
 
 		//	echo $type;
-          $this->feeds_collection->feeds = [];
+          	$this->feeds_collection->feeds = [];
 
 			$this->feeds_collection->import($this->settings, $type, $nr_of_feeds, $offset );
+			$this->feeds_collection->sort_feeds();
+
 			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
 			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
 			//print_r($this->feeds_collection->feeds);

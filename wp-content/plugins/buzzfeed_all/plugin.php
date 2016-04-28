@@ -63,6 +63,21 @@ if( class_exists('BuzzFeed_collection') ) {
           
 		);
 
+		private $feed_order = array(
+			'meldingen',
+			'nieuws',
+			'socialmedia',
+			'wieiswie',
+			'buurtvan',
+			'kalender',
+			'brochure',
+			'jaarverslag',
+			'werkenbij',
+			'huurdersraad',
+			'koopenwoon',
+			'boekenkast'
+		);
+
 		// holds a list of used post types in this feed, if any of the posts change reset the cache
 		private $post_types_array = array(
 			'bericht',
@@ -98,6 +113,8 @@ if( class_exists('BuzzFeed_collection') ) {
 				delete_transient('all_feeds');
 			}
 		}
+
+
 
 
 		function get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type = 'home', $lat = NULL, $long = NULL, $radius = 5) 
@@ -255,7 +272,7 @@ if( class_exists('BuzzFeed_collection') ) {
 			$feeds[] = $source_array[11];
 
 			array_unshift($types,'meldingen');
-			
+
 			foreach($query->posts as $feedurl){	
 				
 				switch ($feedurl->post_title) {
@@ -358,7 +375,7 @@ if( class_exists('BuzzFeed_collection') ) {
 						));
 
 						//Add the result
-						$this->feeds[] = $result;
+						$this->unsortedFeeds[] = $result;
 
 					}
 
@@ -391,21 +408,40 @@ if( class_exists('BuzzFeed_collection') ) {
 					} else if ($items[0] === "rss") {
 						//print_r($items);
 						$result = apply_filters($items[0]."/get_feeds", array(
-							"type"=>$items[2],
+							"source"=>$items[2],
 							"nr_of_feeds"=>$items[3]
 						));
 
 					}
 
-					$this->feeds[] = $result;
+					$this->unsortedFeeds[] = $result;
 
 				}
 				
 			}
 
+			// sort the unsortedfeeds to resemble the given order in the types arguments
+			//print_r($types);
+			//print_r($this->unsortedFeeds);
+			foreach ($this->feed_order as $type) {
+
+				foreach ($this->unsortedFeeds as $feed) {
+
+					if ($type === $feed['response'][0]->type) {
+						$this->feeds[] = $feed;
+					}
+					//echo $feed['response'][0]->type;
+					# code...
+				}
+				# code...
+			}
+
+
+
 			//Set the cache
 			$this->set_cache('all_feeds', 30);
 		}
+
 
 	}
 }
@@ -471,6 +507,8 @@ if( class_exists('BuzzFeed') ) {
           $this->feeds_collection->feeds = [];
 
 		  $this->feeds_collection->get_all_feeds($types,$nr_of_feeds);
+
+
 		  $this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
 		  $this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
 			//print_r($this->feeds_collection->feeds);
