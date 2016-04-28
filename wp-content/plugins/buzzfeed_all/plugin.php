@@ -36,6 +36,9 @@ if( class_exists('BuzzFeed_collection') ) {
 
 	class BuzzFeedAll_collection extends BuzzFeed_collection {
 
+
+		
+
 		/* GETTERS ------------------ */
 
 		/* DDW14 ------------------ */
@@ -60,7 +63,41 @@ if( class_exists('BuzzFeed_collection') ) {
           
 		);
 
+		// holds a list of used post types in this feed, if any of the posts change reset the cache
+		private $post_types_array = array(
+			'bericht',
+			'wieiswie',
+	        'kalender',
+	        'brochure',
+	        'buurtvan',
+            'jaarverslag',
+            'koopenwoon',
+            'werkenbij',
+            'huurdersraad',
+            'boekenkast',
+            'meldingen'
+		);
 
+		function __construct()
+		{
+
+			add_action( 'save_post', array($this,"on_post_save"),10,1);
+
+			// Construct the parent()
+	    	//parent::__construct();
+
+		}
+
+
+
+		// setup a hook that on a post save the cache is emptied
+		function on_post_save( $post_id ) {
+
+			// if the saved post is found inside the post types array, reset the cache
+			if (in_array(get_post_type($post_id), $this->post_types_array)) {
+				delete_transient('all_feeds');
+			}
+		}
 
 
 		function get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type = 'home', $lat = NULL, $long = NULL, $radius = 5) 
@@ -188,16 +225,16 @@ if( class_exists('BuzzFeed_collection') ) {
 		/* Get wordpress feed */
 		function get_all_feeds($types=array(),$nr_of_feeds='')
 		{	
-		    
+
 			// Cache the data
-			$use_cache = (isset($_GET['use_cache'])) ? TRUE : FALSE;
-			
-            if($use_cache == TRUE)
-			{
-				$this->fetch_cache('all_feeds');
-				return;	
-			}
+			//$use_cache = (isset($_GET['use_cache'])) ? TRUE : FALSE;
 				
+
+			if ($this->has_cache('all_feeds')) {
+				$this->fetch_cache('all_feeds');
+				return;
+			}
+
 			//Loop trough the feeds\
 			$feeds = array();
 
@@ -216,6 +253,7 @@ if( class_exists('BuzzFeed_collection') ) {
 			
 			$source_array = $this->feed_array;
 			$feeds[] = $source_array[11];
+
 			array_unshift($types,'meldingen');
 			
 			foreach($query->posts as $feedurl){	
@@ -289,19 +327,28 @@ if( class_exists('BuzzFeed_collection') ) {
 					
 
 					if(in_array($items[2],$types)){
-					$url = call_user_func_array('self::get_source_url', $items); //$this->get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type, $lat, $long, $radius);
-										
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-					curl_setopt($ch, CURLOPT_URL, $url);
-					$result = json_decode(curl_exec($ch));
-					curl_close($ch);
-				
-					//Add the result
-					$this->feeds[] = $result;
 
-				}
+						/*
+						$url = call_user_func_array('self::get_source_url', $items); //$this->get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type, $lat, $long, $radius);
+											
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_URL, $url);
+						$result = json_decode(curl_exec($ch));
+						curl_close($ch);*/
+
+
+						// replaced the expensive curl with the call of a simple hook
+						$result = apply_filters("wordpress/get_feeds", array(
+							"source"=>$items[2],
+							"nr_of_feeds"=>$items[3]
+						));
+
+						//Add the result
+						$this->feeds[] = $result;
+
+					}
 
 
 				}
@@ -309,21 +356,35 @@ if( class_exists('BuzzFeed_collection') ) {
 				else {
 
 					if(in_array($items[0],$types)){
-					$url = call_user_func_array('self::get_source_url', $items); //$this->get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type, $lat, $long, $radius);
-					
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-					curl_setopt($ch, CURLOPT_URL, $url);
-					$result = json_decode(curl_exec($ch));
-					curl_close($ch);
-					
-					//Add the result
-					$this->feeds[] = $result;
-				}}
+
+
+						/*
+						$url = call_user_func_array('self::get_source_url', $items); //$this->get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type, $lat, $long, $radius);
+
+						$ch = curl_init();
+						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+						curl_setopt($ch, CURLOPT_URL, $url);
+						$result = json_decode(curl_exec($ch));
+						curl_close($ch);
+						
+						//Add the result
+						$this->feeds[] = $result;
+						*/
+
+						//replaced the expensive curl with the call of a simple hook
+						$result = apply_filters($items[0]."/get_feeds", array(
+							"nr_of_feeds"=>$items[3]
+						));
+				
+						//Add the result
+						$this->feeds[] = $result;
+
+					}
+				}
 				
 			}
-			
+
 			//Set the cache
 			$this->set_cache('all_feeds', 30);
 		}
@@ -366,11 +427,14 @@ if( class_exists('BuzzFeed') ) {
 		}
 
 
+
 		function register_filters() {
 
 			// Add filter here to connect the api to channel functions
 			// ie. add_filter($this->slug."/get_feeds", array($this,"import_user_feed"), 1,2);
 			add_filter($this->slug."/get_feeds", array($this,"get_feeds"), 1,2);
+
+
 		}
 
 
@@ -386,12 +450,14 @@ if( class_exists('BuzzFeed') ) {
           if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']+1; }
           if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
 
+          $this->feeds_collection->feeds = [];
+
 		  $this->feeds_collection->get_all_feeds($types,$nr_of_feeds);
 		  $this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
 		  $this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
-			
+			//print_r($this->feeds_collection->feeds);
 			// Return status and response
-			return array("status_code" => 1,"totalamount"=>$this->feeds_collection->total,"response" => $this->feeds_collection->feeds);
+		return array("status_code" => 1,"totalamount"=>$this->feeds_collection->total,"response" => $this->feeds_collection->feeds);
 
 
 		}
