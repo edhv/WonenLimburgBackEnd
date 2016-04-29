@@ -53,8 +53,16 @@ if( class_exists('BuzzFeed_collection') ) {
 		// setup a hook that on a post save the cache is emptied
 		function on_post_save( $post_id ) {
 
+			global $wpdb; // you may not need this part. Try with and without it
+
+			// delete transients that match the post type
+			$sql = "DELETE FROM ".$wpdb->prefix."options WHERE `option_name` LIKE ('%_bzz/".get_post_type($post_id)."%')";
+
+			$wpdb->query($sql );
+
 			// if the saved post is found inside the post types array, reset the cache
-			delete_transient('buzzapicache/'.get_post_type($post_id));
+			//delete_transient('buzzapicache/'.get_post_type($post_id));
+
 			
 		}
 
@@ -65,8 +73,9 @@ if( class_exists('BuzzFeed_collection') ) {
 		{	
 
 			// create a cache handle which contains the arguments send to the function
-			$cacheHandle = 'buzzapicache/'.$source.'/'.sha1(strtolower( serialize(func_get_args()) ));
-			
+			//$cacheHandle = 'buzzapicache/'.$source.'/'.sha1(strtolower( serialize(func_get_args()) ));
+			$cacheHandle = 'bzz/'.$source.'/'.substr(sha1(var_export(func_get_args(), true)),0,15);
+
 			// check if there is a cache, but also ignore the cache when the 'no_cache' param is set
 			if ($this->has_cache($cacheHandle) && !isset($_GET['no_cache'])) {
 				$this->fetch_cache($cacheHandle);
