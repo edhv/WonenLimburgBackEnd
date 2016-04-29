@@ -62,11 +62,14 @@ if( class_exists('BuzzFeed_collection') ) {
 
 		/* Get wordpress feed */
 		function import($settings, $source, $nr_of_feeds, $lat = NULL, $long = NULL, $radius = 5, $startdate, $enddate,$offset=NULL, $types = array(), $regio = array(), $afdeling=NULL,$naam=NULL,$sort=NULL )
-		{
+		{	
 
+			// create a cache handle which contains the arguments send to the function
+			$cacheHandle = 'buzzapicache/'.$source.'/'.sha1(strtolower( serialize(func_get_args()) ));
+			
 			// check if there is a cache, but also ignore the cache when the 'no_cache' param is set
-			if ($this->has_cache('buzzapicache/'.$source) && !isset($_GET['no_cache'])) {
-				$this->fetch_cache('buzzapicache/'.$source);
+			if ($this->has_cache($cacheHandle) && !isset($_GET['no_cache'])) {
+				$this->fetch_cache($cacheHandle);
 				return;
 			}
 
@@ -355,7 +358,7 @@ if( class_exists('BuzzFeed_collection') ) {
 							// changed the system to use thumbs
 							$photo_url = get_field('photo',$post_id);
 							if (isset($photo_url['sizes'])) {
-								$photo_url = $photo_url['sizes']['large-thumb'];
+								$photo_url = $photo_url['sizes']['portrait-thumb'];
 							}
 	
 							
@@ -455,7 +458,9 @@ if( class_exists('BuzzFeed_collection') ) {
 			}
 
 			//Set the cache
-			$this->set_cache('buzzapicache/'.$source, 60*60);
+			$this->set_cache($cacheHandle, 60*60);
+
+	
 
 			$this_json = json_encode($this);
 

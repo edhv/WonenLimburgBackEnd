@@ -196,6 +196,8 @@ $args = array(
  add_action( 'init', 'codex_custom_init' );
  add_image_size( 'overview-thumb', 400, 300, true );
  add_image_size( 'large-thumb', 705, 440, true );
+ add_image_size( 'portrait-thumb', 300, 9999 );
+
   //466 pixels wide (and unlimited height)
       
      
