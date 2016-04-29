@@ -428,6 +428,7 @@ if( class_exists('BuzzFeed_collection') ) {
 				foreach ($this->unsortedFeeds as $feed) {
 
 					if ($type === $feed['response'][0]->type) {
+						//echo "ja";
 						$this->feeds[] = $feed;
 					}
 					//echo $feed['response'][0]->type;
@@ -435,11 +436,11 @@ if( class_exists('BuzzFeed_collection') ) {
 				}
 				# code...
 			}
-
+			//print_r($this->feeds);
 
 
 			//Set the cache
-			$this->set_cache('all_feeds', 30);
+			$this->set_cache('all_feeds', 60);
 		}
 
 

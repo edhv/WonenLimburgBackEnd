@@ -343,7 +343,7 @@ if( class_exists('BuzzFeed_collection') ) {
 							$length = strlen($formatted_telnr);
 
 							if($length == 10) {
-								$formatted_telnr = preg_replace("/^1?(\d{3})(\d{4})(\d{3})$/", "$1-$2 $3", $formatted_telnr);
+								$formatted_telnr = preg_replace("/^1?(\d{3})(\d{4})(\d{3})$/", "$1 - $2 $3", $formatted_telnr);
 							}
 
 							$feed_object->set_wieiswie_mail(get_post_meta($post_id, 'persoon_email', true));

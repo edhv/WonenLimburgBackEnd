@@ -43,8 +43,15 @@ if( class_exists('BuzzFeed_collection') ) {
 		{	
 		
 			// Cache the data
-			if($this->has_cache == TRUE)
-			return;
+			// if($this->has_cache == TRUE)
+			// return;
+
+			$cacheHandle = 'buzzapicache/socialmedia/'.$source.$nr_of_feeds;
+
+			if ($this->has_cache($cacheHandle)) {
+				$this->fetch_cache($cacheHandle);
+				return;
+			}
 
 			
 			$timestamp = time();
@@ -171,8 +178,9 @@ if( class_exists('BuzzFeed_collection') ) {
 
 			
 			//Set the cache
-			$this->set_cache();
-			
+			//$this->set_cache();
+			$this->set_cache($cacheHandle, 60);
+
 
 
 		}
@@ -227,7 +235,8 @@ if( class_exists('BuzzFeed') ) {
 
 
 		function get_feeds($arguments) {
-		
+			
+
 
 			// // defaults
 			$nr_of_feeds = $this->settings['nr_of_feeds'];
