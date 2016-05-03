@@ -247,7 +247,7 @@ if( class_exists('BuzzFeed') ) {
 			if (isset($arguments['type'])) { $type = $arguments['source']; }
 
 			// if the system is cached, don't re import
-          	if(!$this->feeds_collection->has_cache || $_GET['no_cache']) {
+          	if(!$this->feeds_collection->has_cache) {
           		$this->feeds_collection->import($this->settings, $type, $nr_of_feeds, NULL, NULL, 0, 0,0);
           	}
           	
