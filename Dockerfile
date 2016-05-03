@@ -11,6 +11,7 @@ RUN chmod +x /usr/local/bin/wp
 
 # Configure PHP
 RUN docker-php-ext-install zip
+RUN docker-php-ext-install mbstring
 
 # Configure Apache
 RUN sed -i "s/AllowOverride None/AllowOverride All/g" /etc/apache2/apache2.conf
