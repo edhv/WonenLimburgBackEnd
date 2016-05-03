@@ -101,7 +101,7 @@ if( class_exists('BuzzFeed_collection') ) {
 		 */
 		function scrapeUrlContents($url, $pubDate) {
 
-			$cacheHandle = "wl-page/".sha1(strtolower($url.$pubDate));
+			$cacheHandle = "wlp/".sha1(strtolower($url.$pubDate));
 
 			// check if this page has been scraped before
 			$cache = get_transient($cacheHandle);
@@ -128,9 +128,12 @@ if( class_exists('BuzzFeed_collection') ) {
 
 			// image 
 			$domImages = $html->find('#contentblock img');
-			if ($domImages[0]->src) {
-				$articleImage = "http://www.wonenlimburg.nl".$domImages[0]->src;
+			if (isset($domImages[0])) {
+				if (isset($domImages[0]->src)) {
+					$articleImage = "http://www.wonenlimburg.nl".$domImages[0]->src;
+				}
 			}
+
 
 			// remove all images
 			foreach($html->find('#contentblock .document img') as $item) {
