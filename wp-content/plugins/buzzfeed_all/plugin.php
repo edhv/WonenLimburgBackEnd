@@ -60,18 +60,21 @@ if( class_exists('BuzzFeed_collection') ) {
             array('wordpress', 'tag', 'huurdersraad', '1'),
             array('wordpress', 'tag', 'boekenkast', '1'),
             array('wordpress', 'tag', 'meldingen', '1'),
+            array('wordpress', 'tag', 'intro', '1'),
+
           
 		);
 
 		private $feed_order = array(
+			'intro',
 			'meldingen',
 			'nieuws',
 			'socialmedia',
-			'wieiswie',
 			'buurtvan',
 			'kalender',
 			'brochure',
 			'jaarverslag',
+			'wieiswie',
 			'werkenbij',
 			'huurdersraad',
 			'koopenwoon',
@@ -80,6 +83,7 @@ if( class_exists('BuzzFeed_collection') ) {
 
 		// holds a list of used post types in this feed, if any of the posts change reset the cache
 		private $post_types_array = array(
+			'intro',
 			'bericht',
 			'wieiswie',
 	        'kalender',
@@ -116,7 +120,7 @@ if( class_exists('BuzzFeed_collection') ) {
 
 
 
-
+		/*
 		function get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type = 'home', $lat = NULL, $long = NULL, $radius = 5) 
 		{	
 
@@ -146,7 +150,6 @@ if( class_exists('BuzzFeed_collection') ) {
 					$param = 'source='.$source.'';	
 				} 
 			}
-
 
 
 			// Facebook
@@ -234,7 +237,7 @@ if( class_exists('BuzzFeed_collection') ) {
 			return $url;
 		}
 		
-		
+		*/
 		
 		
 	
@@ -269,15 +272,17 @@ if( class_exists('BuzzFeed_collection') ) {
 			$query    = new WP_Query($args);
 			
 			$source_array = $this->feed_array;
+
 			$feeds[] = $source_array[11];
 
-			array_unshift($types,'meldingen');
+			// turned off 'home' meldingen
+			//array_unshift($types,'meldingen');
 
 			foreach($query->posts as $feedurl){	
 				
 				switch ($feedurl->post_title) {
 					
-					
+	
 					case 'socialmedia':
 						$feeds[] = $source_array[0];
 						break;
@@ -321,6 +326,12 @@ if( class_exists('BuzzFeed_collection') ) {
 					case 'boekenkast':
 						$feeds[] = $source_array[10];
 						break;
+
+
+					case 'intro':
+						$feeds[] = $source_array[12];
+						break;
+
 	
 					default:
 						# code...
@@ -328,7 +339,6 @@ if( class_exists('BuzzFeed_collection') ) {
 				}
 
 			}
-
 
 
 			// rss feeds, add rss feeds
@@ -352,7 +362,6 @@ if( class_exists('BuzzFeed_collection') ) {
 				
 				if($items[0]=='wordpress'){
 			
-					
 					
 
 					if(in_array($items[2],$types)){
@@ -436,7 +445,7 @@ if( class_exists('BuzzFeed_collection') ) {
 				}
 				# code...
 			}
-			//print_r($this->feeds);
+
 
 
 			//Set the cache
@@ -470,7 +479,7 @@ if( class_exists('BuzzFeed') ) {
 
 			// Settings
 			$this->settings = array(
-            "types" => ["home","socialmedia","boekenkast","huurdersraad","koopenwoon","werkenbij","bericht","jaarverslag","brochure","kalender","wieiswie","buurtvan"]
+            "types" => ["intro","home","socialmedia","boekenkast","huurdersraad","koopenwoon","werkenbij","bericht","jaarverslag","brochure","kalender","wieiswie","buurtvan"]
             );
 
 			$this->feeds_collection = new BuzzFeedAll_collection(); 

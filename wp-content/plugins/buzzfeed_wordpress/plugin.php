@@ -74,13 +74,13 @@ if( class_exists('BuzzFeed_collection') ) {
 
 			// create a cache handle which contains the arguments send to the function
 			//$cacheHandle = 'buzzapicache/'.$source.'/'.sha1(strtolower( serialize(func_get_args()) ));
-			$cacheHandle = 'bzz/'.$source.'/'.substr(sha1(var_export(func_get_args(), true)),0,15);
+			// $cacheHandle = 'bzz/'.$source.'/'.substr(sha1(var_export(func_get_args(), true)),0,15);
 
-			// check if there is a cache, but also ignore the cache when the 'no_cache' param is set
-			if ($this->has_cache($cacheHandle) && !isset($_GET['no_cache'])) {
-				$this->fetch_cache($cacheHandle);
-				return;
-			}
+			// // check if there is a cache, but also ignore the cache when the 'no_cache' param is set
+			// if ($this->has_cache($cacheHandle) && !isset($_GET['no_cache'])) {
+			// 	$this->fetch_cache($cacheHandle);
+			// 	return;
+			// }
 
 			if ($source=='kalender'){
 
@@ -192,9 +192,8 @@ if( class_exists('BuzzFeed_collection') ) {
 
 			}
 
-			else if($source=='boekenkast' || $source=='huurdersraad' || $source=='koopenwoon' || $source=='werkenbij' )
+			else if($source=='intro' || $source=='boekenkast' || $source=='huurdersraad' || $source=='koopenwoon' || $source=='werkenbij' )
 			{
-
 				$args =  array(
 					'post_type' =>	'home'
 
@@ -226,7 +225,7 @@ if( class_exists('BuzzFeed_collection') ) {
 
 
 
-				if($source=='boekenkast' || $source=='huurdersraad' || $source=='koopenwoon' || $source=='werkenbij' ){
+				if ($source=='boekenkast' || $source=='huurdersraad' || $source=='koopenwoon' || $source=='werkenbij' ){
 
 					$feed_object = new BuzzFeedWordpress_object();
 
@@ -304,10 +303,7 @@ if( class_exists('BuzzFeed_collection') ) {
 						break;
 					}
 
-				}
-
-				else if($source=='kalender' || $source=='meldingen' || $source=='wieiswie' || $source=='brochure' || $source=='buurtvan' || $source=='bericht' || $source=='jaarverslag' ){
-
+				} else if( $source=='intro' || $source=='kalender' || $source=='meldingen' || $source=='wieiswie' || $source=='brochure' || $source=='buurtvan' || $source=='bericht' || $source=='jaarverslag' ){
 					foreach($query->posts as $post)
 					{
 						//print_r($post);
@@ -323,8 +319,13 @@ if( class_exists('BuzzFeed_collection') ) {
 						$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'photo', true));
 
 						$feed_object->set_url($post_url);
+						$feed_object->set_type($post->post_type);
+
+						$the_content = apply_filters('the_content', $post->post_content);
+
 
 						if($source=="kalender" || $source=="meldingen"){
+
 							$post_date = get_field('begin_tijd', $post_id, false);
 							$feed_object->set_starttimedate(get_field('begin_tijd', $post_id, false));
 							$feed_object->set_endtimedate(get_field('eind_tijd', $post_id, false));
@@ -351,6 +352,7 @@ if( class_exists('BuzzFeed_collection') ) {
 
 
 						else if($source=="wieiswie"){
+
 							$formatted_telnr = get_post_meta($post_id, 'persoon_telnr', true);
 							$length = strlen($formatted_telnr);
 
@@ -398,21 +400,27 @@ if( class_exists('BuzzFeed_collection') ) {
 
 						else if($source=="bericht")
 						{
+
 							$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'bericht_img', true));
 							$post->post_content = get_field('bericht_text',$post_id);
 							$post->post_type = get_field('bericht_type',$post_id)."bericht";
 
 						}
 
+						else if($source=="intro")
+						{
+							$feed_object->set_type('intro');
+
+
+						}
 						$feed_object->set_media($photo_url);
 
-						$feed_object->set_type($post->post_type);
 						$feed_object->set_feed_id($post_id);
 						$feed_object->set_timestamp($post_date);
 						$feed_object->set_date($post_date);
 						$feed_object->set_title($post->post_title);
 
-						$feed_object->set_text($post->post_content);
+						$feed_object->set_text($the_content);
 
 						$this->feeds[] = $feed_object;
 					//	print_r($feed_object);
