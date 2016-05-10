@@ -49,7 +49,7 @@ if( class_exists('BuzzFeed_collection') ) {
 	
 			//array('youtube', 'user', 'UCoP_KWmDZo8I4xeotYYGAmg', '1'),
 			array('socialmedia', '', '', '1'),
-			array('rss', 'tag', 'nieuws', '1'),
+			array('rss', 'tag', 'nieuws', '2'),
 			array('wordpress', 'tag', 'wieiswie', '1'),
 	        array('wordpress', 'tag', 'kalender', '6'),
 	        array('wordpress', 'tag', 'brochure', '1'),
@@ -437,6 +437,7 @@ if( class_exists('BuzzFeed_collection') ) {
 				foreach ($this->unsortedFeeds as $feed) {
 
 					if ($type === $feed['response'][0]->type) {
+						//print_r($feed);
 						//echo "ja";
 						$this->feeds[] = $feed;
 					}

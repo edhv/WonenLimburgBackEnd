@@ -74,13 +74,13 @@ if( class_exists('BuzzFeed_collection') ) {
 
 			// create a cache handle which contains the arguments send to the function
 			//$cacheHandle = 'buzzapicache/'.$source.'/'.sha1(strtolower( serialize(func_get_args()) ));
-			// $cacheHandle = 'bzz/'.$source.'/'.substr(sha1(var_export(func_get_args(), true)),0,15);
+			$cacheHandle = 'bzz/'.$source.'/'.substr(sha1(var_export(func_get_args(), true)),0,15);
 
-			// // check if there is a cache, but also ignore the cache when the 'no_cache' param is set
-			// if ($this->has_cache($cacheHandle) && !isset($_GET['no_cache'])) {
-			// 	$this->fetch_cache($cacheHandle);
-			// 	return;
-			// }
+			// check if there is a cache, but also ignore the cache when the 'no_cache' param is set
+			if ($this->has_cache($cacheHandle) && !isset($_GET['no_cache'])) {
+				$this->fetch_cache($cacheHandle);
+				return;
+			}
 
 			if ($source=='kalender'){
 
