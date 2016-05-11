@@ -62,7 +62,7 @@ if( class_exists('BuzzFeed_collection') ) {
 				$feed_object->set_date(strtotime($rssItem['pubDate']));
 				$feed_object->set_title($rssItem['title']);
 				$feed_object->set_text($rssItem['description']);
-				//$feed_object->set_media($media);
+				$feed_object->set_media("");
 
 				
 
