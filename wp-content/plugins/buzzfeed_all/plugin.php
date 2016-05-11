@@ -6,7 +6,7 @@ Plugin URI:
 Description: Get all feeds
 Author: Ties Kuypers, global structure by Jeroen Braspenning
 Author URI: 
-Version: 1.0.1
+Version: 1.0.2
 Text Domain: 
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */

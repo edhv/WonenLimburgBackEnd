@@ -6,7 +6,7 @@ Plugin URI:
 Description: Get an RSS feed
 Author: Jeroen Braspenning
 Author URI: www.edhv.nl
-Version: 1.0.1
+Version: 1.0.2
 Text Domain: 
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
