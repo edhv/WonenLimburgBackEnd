@@ -6,7 +6,7 @@ Plugin URI:
 Description: Get an RSS feed
 Author: Jeroen Braspenning
 Author URI: www.edhv.nl
-Version: 1.0.1
+Version: 1.0.2
 Text Domain: 
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
@@ -62,7 +62,7 @@ if( class_exists('BuzzFeed_collection') ) {
 				$feed_object->set_date(strtotime($rssItem['pubDate']));
 				$feed_object->set_title($rssItem['title']);
 				$feed_object->set_text($rssItem['description']);
-				//$feed_object->set_media($media);
+				$feed_object->set_media("");
 
 				
 
@@ -101,7 +101,7 @@ if( class_exists('BuzzFeed_collection') ) {
 		 */
 		function scrapeUrlContents($url, $pubDate) {
 
-			$cacheHandle = "wl-page/".sha1(strtolower($url.$pubDate));
+			$cacheHandle = "wlp/".sha1(strtolower($url.$pubDate));
 
 			// check if this page has been scraped before
 			$cache = get_transient($cacheHandle);
@@ -128,9 +128,12 @@ if( class_exists('BuzzFeed_collection') ) {
 
 			// image 
 			$domImages = $html->find('#contentblock img');
-			if ($domImages[0]->src) {
-				$articleImage = "http://www.wonenlimburg.nl".$domImages[0]->src;
+			if (isset($domImages[0])) {
+				if (isset($domImages[0]->src)) {
+					$articleImage = "http://www.wonenlimburg.nl".$domImages[0]->src;
+				}
 			}
+
 
 			// remove all images
 			foreach($html->find('#contentblock .document img') as $item) {
@@ -244,7 +247,7 @@ if( class_exists('BuzzFeed') ) {
 			if (isset($arguments['type'])) { $type = $arguments['source']; }
 
 			// if the system is cached, don't re import
-          	if(!$this->feeds_collection->has_cache || $_GET['no_cache']) {
+          	if(!$this->feeds_collection->has_cache) {
           		$this->feeds_collection->import($this->settings, $type, $nr_of_feeds, NULL, NULL, 0, 0,0);
           	}
           	

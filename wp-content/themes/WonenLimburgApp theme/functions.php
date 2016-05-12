@@ -67,7 +67,7 @@ $args = array(
       'editor',
       'excerpt',
       'thumbnail',
-      'revisions'
+      'revisions',
       ),
     'hierarchical' => true,
     'menu_position' => 5
