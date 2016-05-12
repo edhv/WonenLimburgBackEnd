@@ -197,6 +197,8 @@ $args = array(
  add_image_size( 'overview-thumb', 400, 300, true );
  add_image_size( 'large-thumb', 705, 440, true );
  add_image_size( 'portrait-thumb', 300, 9999 );
+ add_image_size( 'team-landscape-thumb', 500, 9999 );
+ add_image_size( 'team-landscape', 1000, 9999 );
 
   //466 pixels wide (and unlimited height)
       

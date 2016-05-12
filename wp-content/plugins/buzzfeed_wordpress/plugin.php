@@ -18,7 +18,9 @@ if( class_exists('BuzzFeed_object') ) {
 	class BuzzFeedWordpress_object extends BuzzFeed_object {
 
 		// Setters overwrite
-
+		function set_media_large($value = false) {
+			$this->media_large = $value;
+		}
 
 	}
 
@@ -367,12 +369,16 @@ if( class_exists('BuzzFeed_collection') ) {
 							$feed_object->set_wieiswie_afdeling(get_post_meta($post_id, 'afdeling', true));
 
 							// changed the system to use thumbs
-							$photo_url = get_field('photo',$post_id);
-							if (isset($photo_url['sizes'])) {
-								$photo_url = $photo_url['sizes']['portrait-thumb'];
-							}
-	
+							$media = get_field('photo',$post_id);
+							$photo_url = false;
+							$photo_url_large = false;
 							
+							if (isset($media['sizes'])) {
+								$photo_url = $media['sizes']['team-landscape-thumb'];
+								$photo_url_large = $media['sizes']['team-landscape'];
+							}
+							
+							$feed_object->set_media_large($photo_url_large);
 						}
 
 
