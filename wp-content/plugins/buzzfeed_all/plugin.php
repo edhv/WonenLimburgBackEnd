@@ -70,10 +70,10 @@ if( class_exists('BuzzFeed_collection') ) {
 			'meldingen',
 			'nieuws',
 			'socialmedia',
-			'buurtvan',
 			'kalender',
 			'brochure',
 			'jaarverslag',
+			'buurtvan',
 			'wieiswie',
 			'werkenbij',
 			'huurdersraad',
@@ -506,25 +506,27 @@ if( class_exists('BuzzFeed') ) {
 
 		function get_feeds($arguments) {
 
-	      $types     = $this->settings['types'];
-		  $nr_of_feeds = 12; 
-		  $offset = 0;
+			$types     = $this->settings['types'];
+			$nr_of_feeds = 12; 
+			$offset = 0;
 
-          if (isset($arguments['types'])) { $types = $arguments['types']; $types = explode(",",$types);	array_unshift($types,'home'); }
+			if (isset($arguments['types'])) { $types = $arguments['types']; $types = explode(",",$types);	array_unshift($types,'home'); }
 
-          if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']+1; }
-          if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
+			if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']+1; }
+			if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
 
-          $this->feeds_collection->feeds = [];
+			$this->feeds_collection->feeds = [];
 
-		  $this->feeds_collection->get_all_feeds($types,$nr_of_feeds);
+			$this->feeds_collection->get_all_feeds($types,$nr_of_feeds);
 
 
-		  $this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
-		  $this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
-			//print_r($this->feeds_collection->feeds);
+			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
+			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
+
 			// Return status and response
-		return array("status_code" => 1,"totalamount"=>$this->feeds_collection->total,"response" => $this->feeds_collection->feeds);
+			$response = array("status_code" => 1,"totalamount"=>$this->feeds_collection->total,"response" => $this->feeds_collection->feeds);
+
+			return $response;
 
 
 		}
