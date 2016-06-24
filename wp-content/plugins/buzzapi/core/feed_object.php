@@ -145,10 +145,17 @@ class BuzzFeed_object {
 	// Helpers
 	function fetch_tags()
 	{
-		$text = $this->text;	
+		$text = $this->text;
+
+		if (!is_string($text)) {
+			return false;
+		}
+
+		
 		$tags = array();
 		
 		$has_tags = preg_match_all("/(#\w+)/", $text, $tags);
+
 		if($has_tags)
 		{
 			$tags = $tags[0];
