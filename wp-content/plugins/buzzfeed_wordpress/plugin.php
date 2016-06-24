@@ -78,7 +78,7 @@ if( class_exists('BuzzFeed_collection') ) {
 			//$cacheHandle = 'buzzapicache/'.$source.'/'.sha1(strtolower( serialize(func_get_args()) ));
 			$cacheHandle = 'bzz/'.$source.'/'.substr(sha1(var_export(func_get_args(), true)),0,15);
 
-			// check if there is a cache, but also ignore the cache when the 'no_cache' param is set
+			// // check if there is a cache, but also ignore the cache when the 'no_cache' param is set
 			if ($this->has_cache($cacheHandle) && !isset($_GET['no_cache'])) {
 				$this->fetch_cache($cacheHandle);
 				return;
@@ -207,8 +207,9 @@ if( class_exists('BuzzFeed_collection') ) {
 			else{
 
 				$args     = array(
-					'post_type' =>	$source
-
+					'post_type' =>	$source,
+					'orderby' => 'menu_order',
+					'order' => 'ASC'
 					);
 			}
 

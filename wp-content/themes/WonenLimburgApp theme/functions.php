@@ -1,18 +1,6 @@
 <?php 
 
-if( function_exists('acf_add_options_page') ) {
-  
-  acf_add_options_page(array(
-    'page_title'  => 'Contact',
-    'menu_title'  => 'Contact',
-    'menu_slug'   => 'wonen-limburg-contact',
-    'capability'  => 'edit_posts',
-    'redirect'    => false
-  ));
-  
 
-  
-}
 function wpbootstrap_scripts_with_jquery()
 {
 	// Register the script like this for a theme:
