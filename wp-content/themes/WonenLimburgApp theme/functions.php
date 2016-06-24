@@ -1,5 +1,18 @@
 <?php 
 
+if( function_exists('acf_add_options_page') ) {
+  
+  acf_add_options_page(array(
+    'page_title'  => 'Contact',
+    'menu_title'  => 'Contact',
+    'menu_slug'   => 'wonen-limburg-contact',
+    'capability'  => 'edit_posts',
+    'redirect'    => false
+  ));
+  
+
+  
+}
 function wpbootstrap_scripts_with_jquery()
 {
 	// Register the script like this for a theme:
@@ -53,7 +66,7 @@ function post_remove ()
 { 
    remove_menu_page('edit.php');
    remove_menu_page('edit-comments.php');
-   remove_menu_page('edit.php?post_type=page');
+   //remove_menu_page('edit.php?post_type=page');
 } 
 
 function codex_custom_init() {
