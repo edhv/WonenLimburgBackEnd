@@ -1,5 +1,6 @@
 <?php 
 
+
 function wpbootstrap_scripts_with_jquery()
 {
 	// Register the script like this for a theme:
@@ -53,7 +54,7 @@ function post_remove ()
 { 
    remove_menu_page('edit.php');
    remove_menu_page('edit-comments.php');
-   remove_menu_page('edit.php?post_type=page');
+   //remove_menu_page('edit.php?post_type=page');
 } 
 
 function codex_custom_init() {
@@ -197,6 +198,8 @@ $args = array(
  add_image_size( 'overview-thumb', 400, 300, true );
  add_image_size( 'large-thumb', 705, 440, true );
  add_image_size( 'portrait-thumb', 300, 9999 );
+ add_image_size( 'team-landscape-thumb', 500, 9999 );
+ add_image_size( 'team-landscape', 1000, 9999 );
 
   //466 pixels wide (and unlimited height)
       

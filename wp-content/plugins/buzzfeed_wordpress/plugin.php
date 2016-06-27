@@ -18,7 +18,9 @@ if( class_exists('BuzzFeed_object') ) {
 	class BuzzFeedWordpress_object extends BuzzFeed_object {
 
 		// Setters overwrite
-
+		function set_media_large($value = false) {
+			$this->media_large = $value;
+		}
 
 	}
 
@@ -76,7 +78,7 @@ if( class_exists('BuzzFeed_collection') ) {
 			//$cacheHandle = 'buzzapicache/'.$source.'/'.sha1(strtolower( serialize(func_get_args()) ));
 			$cacheHandle = 'bzz/'.$source.'/'.substr(sha1(var_export(func_get_args(), true)),0,15);
 
-			// check if there is a cache, but also ignore the cache when the 'no_cache' param is set
+			// // check if there is a cache, but also ignore the cache when the 'no_cache' param is set
 			if ($this->has_cache($cacheHandle) && !isset($_GET['no_cache'])) {
 				$this->fetch_cache($cacheHandle);
 				return;
@@ -205,8 +207,9 @@ if( class_exists('BuzzFeed_collection') ) {
 			else{
 
 				$args     = array(
-					'post_type' =>	$source
-
+					'post_type' =>	$source,
+					'orderby' => 'menu_order',
+					'order' => 'ASC'
 					);
 			}
 
@@ -367,12 +370,16 @@ if( class_exists('BuzzFeed_collection') ) {
 							$feed_object->set_wieiswie_afdeling(get_post_meta($post_id, 'afdeling', true));
 
 							// changed the system to use thumbs
-							$photo_url = get_field('photo',$post_id);
-							if (isset($photo_url['sizes'])) {
-								$photo_url = $photo_url['sizes']['portrait-thumb'];
-							}
-	
+							$media = get_field('photo',$post_id);
+							$photo_url = false;
+							$photo_url_large = false;
 							
+							if (isset($media['sizes'])) {
+								$photo_url = $media['sizes']['team-landscape-thumb'];
+								$photo_url_large = $media['sizes']['team-landscape'];
+							}
+							
+							$feed_object->set_media_large($photo_url_large);
 						}
 
 

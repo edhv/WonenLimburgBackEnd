@@ -71,7 +71,7 @@ wp-content/plugins/*
 !wp-content/plugins/buzzfeed_wordpress
 !wp-content/plugins/buzzfeed_youtube
 !wp-content/plugins/buzzfeed_rss
-
+!wp-content/plugins/buzzfeed_pages
 
 
 
