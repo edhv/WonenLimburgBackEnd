@@ -552,10 +552,7 @@ if( class_exists('BuzzFeed') ) {
 
 		function get_feeds($arguments) {
 
-			//print_r($arguments);
 			//echo "-----------------------------------------------------------------------";
-			//print_r($arguments);
-			// // defaults
 			$nr_of_feeds = $this->settings['nr_of_feeds'];
 			$source      = $this->settings['default_source'];
 			$startdate   = $this->settings['startdate'];
@@ -586,10 +583,6 @@ if( class_exists('BuzzFeed') ) {
 
 			$this->feeds_collection->import($this->settings['wordpress'],$source, $nr_of_feeds,0,0,5,$startdate,$enddate,$offset,$types, $regio, $afdeling,$naam,$sort);
 
-			//$this->feeds_collection->sort_feeds();
-			//print_r("!COLLECTION: \n");
-			// print_r(count($this->feeds_collection->feeds));
-			// print_r($this->feeds_collection->feeds);
 			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
 			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
 
