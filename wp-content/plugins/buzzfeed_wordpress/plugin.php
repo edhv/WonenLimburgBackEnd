@@ -73,7 +73,7 @@ if( class_exists('BuzzFeed_collection') ) {
 		/* Get wordpress feed */
 		function import($settings, $source, $nr_of_feeds, $lat = NULL, $long = NULL, $radius = 5, $startdate, $enddate,$offset=NULL, $types = array(), $regio = array(), $afdeling=NULL,$naam=NULL,$sort=NULL )
 		{	
-
+			
 			// create a cache handle which contains the arguments send to the function
 			//$cacheHandle = 'buzzapicache/'.$source.'/'.sha1(strtolower( serialize(func_get_args()) ));
 			$cacheHandle = 'bzz/'.$source.'/'.substr(sha1(var_export(func_get_args(), true)),0,15);
@@ -83,7 +83,7 @@ if( class_exists('BuzzFeed_collection') ) {
 				$this->fetch_cache($cacheHandle);
 				return;
 			}
-
+	
 			if ($source=='kalender'){
 
 				$args     = array(
@@ -411,7 +411,7 @@ if( class_exists('BuzzFeed_collection') ) {
 							$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'bericht_img', true));
 							$post->post_content = get_field('bericht_text',$post_id);
 							$post->post_type = get_field('bericht_type',$post_id)."bericht";
-
+							$the_content = get_field('bericht_text',$post_id);
 						}
 
 						else if($source=="intro")
@@ -420,6 +420,7 @@ if( class_exists('BuzzFeed_collection') ) {
 
 
 						}
+
 						$feed_object->set_media($photo_url);
 
 						$feed_object->set_feed_id($post_id);
