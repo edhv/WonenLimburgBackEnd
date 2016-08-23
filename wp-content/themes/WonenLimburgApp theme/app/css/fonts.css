@@ -1,0 +1,49 @@
+@font-face {
+	font-family: 'calibri';
+	src: url('../assets/fonts/CALIBRI_.eot');
+	src: local('☺'), url('../assets/fonts/CALIBRI_.woff') format('woff'), url('../assets/fonts/CALIBRI_.ttf') format('truetype'), url('../assets/fonts/CALIBRI_.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'calibri';
+	src: url('../assets/fonts/CALIBRIB.eot');
+	src: local('☺'), url('../assets/fonts/CALIBRIB.woff') format('woff'), url('../assets/fonts/CALIBRIB.ttf') format('truetype'), url('../assets/fonts/CALIBRIB.svg') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'corporate';
+	src: url('../assets/fonts/CORPSBQL.eot');
+	src: local('☺'), url('../assets/fonts/CORPSBQL.woff') format('woff'), url('../assets/fonts/CORPSBQL.ttf') format('truetype'), url('../assets/fonts/CORPSBQL.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'corporate';
+	src: url('../assets/fonts/CORPSBQR.eot');
+	src: local('☺'), url('../assets/fonts/CORPSBQR.woff') format('woff'), url('../assets/fonts/CORPSBQR.ttf') format('truetype'), url('../assets/fonts/CORPSBQR.svg') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'geomatric';
+	src: url('../assets/fonts/GE415BTB.eot');
+	src: local('☺'), url('../assets/fonts/GE415BTB.woff') format('woff'), url('../assets/fonts/GE415BTB.ttf') format('truetype'), url('../assets/fonts/GE415BTB.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'geomatric';
+	src: url('../assets/fonts/GE415BTL.eot');
+	src: local('☺'), url('../assets/fonts/GE415BTL.woff') format('woff'), url('../assets/fonts/GE415BTL.ttf') format('truetype'), url('../assets/fonts/GE415BTL.svg') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+
+
