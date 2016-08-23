@@ -1,0 +1,438 @@
+
+
+
+.btn {
+	display:inline-block;
+	margin:5px;
+	border-radius:3px;
+	font-family:'calibri';
+	font-weight:normal;
+	color:#FFF;
+	font-size:15px;
+	text-decoration:none;
+	padding:5px 7px;
+	line-height:15px;
+}
+
+
+	.btn.label-btn {
+		display:block;
+		padding:0px;
+		padding:5px 8px 2px 8px;
+		height:25px;
+		width:auto;
+		float:left;
+		clear:both;
+	}
+
+		/*
+		.btn.label-btn::after {
+			display:block;
+			width:22px;
+			height:22px;
+			content:"";
+			background-image:url(../img/assets/label_arrow_right.svg);
+			background-repeat:no-repeat;
+			background-size:100% 100%;
+			float:right;
+			font-size:0px;
+			margin:0px;
+			margin-left:15px;
+			margin-top:-3px;
+			margin-right:3px;
+		}
+		*/
+
+		.btn.label-btn.pagination::after {
+			background-image:url(../img/assets/label_arrow_down.svg);
+		}
+
+	
+	.btn.label-btn.news,
+	.btn.label-btn.linkedin,
+	.btn.label-btn.brochure {
+		background:linear-gradient(to bottom, #a8c0d5, #9cb7d0);
+	}
+	.btn.label-btn.social,
+	.btn.label-btn.pagination {
+		background:linear-gradient(to bottom, #41a8af, #018c96);
+	}
+	.btn.label-btn.events,
+	.btn.label-btn.who {
+		background:linear-gradient(to bottom, #b58b8c, #a57173);
+	}
+	.btn.label-btn.youtube,
+	.btn.label-btn.video {
+		background:linear-gradient(to bottom, #e4c46f, #deb54b);
+	}
+	.btn.label-btn.building,
+	.btn.label-btn.reports {
+		background:linear-gradient(to bottom, #e0d2c7, #d8c7b9);
+	}
+	.btn.label-btn.neighbourhood,
+	.btn.label-btn.press {
+		background:linear-gradient(to bottom, #80ae85, #6da273);
+	}
+
+
+
+
+
+	.btn.icon-btn {
+		width:37px;
+		height:35px;
+		text-indent:100%;
+		white-space:nowrap;
+		overflow:hidden;
+		font-size:0px;
+		background:linear-gradient(to bottom, #e0d2c7, #d8c7b9);
+	}
+		.btn.icon-btn::after {
+			display:inline-block;
+			width:20px;
+			height:20px;
+			content:"";
+			background-repeat:no-repeat;
+			background-size:100% 100%;
+			font-size:0px;
+			margin-top:-12px;
+			float:left;
+			margin-left:2px;
+		}
+
+
+		.btn.icon-btn.next::after {
+			background-image:url(../img/assets/arrow_right.svg);
+		}
+		.btn.icon-btn.back::after {
+			background-image:url(../img/assets/arrow_left.svg);
+		}
+
+
+		.btn.icon-btn.play {
+			width:41px;
+			padding:5px 10px;
+			background:linear-gradient(to bottom, #ffcb3c, #eeaf00);
+		}
+
+		.btn.icon-btn.play::after {
+			background-image:url(../img/assets/play.svg);
+		}
+
+
+		.btn.icon-btn.facebook::after {
+			background-image:url(../img/assets/facebook.svg);
+		}
+		.btn.icon-btn.twitter::after {
+			background-image:url(../img/assets/twitter.svg);
+		}
+		.btn.icon-btn.linkedin::after {
+			background-image:url(../img/assets/linkedin.svg);
+		}
+		.btn.icon-btn.mail::after {
+			background-image:url(../img/assets/mail_white.svg);
+		}
+		.btn.icon-btn.share::after {
+			background-image:url(../img/assets/share.svg);
+		}
+		.btn.icon-btn.close::after {
+			background-image:url(../img/assets/close.svg);
+		}
+
+
+
+	.btn.icon-btn.zoom {
+		background:linear-gradient(to bottom, #b2c7da, #93b1cc);
+	}
+
+
+		.btn.icon-btn.zoom.in::after {
+			background-image:url(../img/assets/zoom_in.svg);
+		}
+		.btn.icon-btn.zoom.out::after {
+			background-image:url(../img/assets/zoom_out.svg);
+		}
+
+
+
+	.btn.icon-btn.close {
+		background:none;
+	}
+
+
+		.calendar .btn.icon-btn {
+			background:#a47072;
+		}
+
+		.calendar .btn-group.share .btn {
+			width:40px;
+			height:40px;
+		}
+			.calendar .btn-group.share .btn::after {
+				margin-left:3px;
+				margin-top:-10px;
+			}
+
+
+
+
+.btn.menu-btn {
+	padding:0px;
+	background:transparent;
+}
+
+	.btn.menu-btn::after { 
+		width:28px;
+		height:26px;
+		margin-left:3px;
+	}
+	
+
+	.btn.menu-btn.menu::after {
+		background-image:url(../img/assets/menu.svg);
+	}
+
+	.btn.menu-btn.search::after {
+		background-image:url(../img/assets/search.svg);
+	}
+
+	.btn.menu-btn.home::after {
+		background-image:url(../img/assets/home.svg);
+	}
+
+	.btn.menu-btn.close::after {
+		background-image:url(../img/assets/close.svg);
+	}
+
+	.btn.menu-btn.back::after {
+		background-image:url(../img/assets/back.svg);
+	}
+
+	.btn.menu-btn.settings::after {
+		background-image:url(../img/assets/settings.svg);
+	}
+
+	.btn.menu-btn.telephone::after {
+		background-image:url(../img/assets/telephone.svg);
+	}
+
+	.btn.menu-btn.mail::after {
+		background-image:url(../img/assets/mail.svg);
+	}
+
+	.btn.menu-btn.url::after {
+		background-image:url(../img/assets/www.svg);
+	}
+
+
+
+
+
+.btn.link-btn {
+	font-size:18px;
+	font-weight:bold;
+	height:37px;
+	padding:10px;
+	background:linear-gradient(to bottom, #43A9B0, #008B95);
+}
+
+	.btn.link-btn.icon::before {
+		display:inline-block;
+		width:20px;
+		height:20px;
+		content:"";
+		background-repeat:no-repeat;
+		background-size:100% 100%;
+		font-size:0px;
+		margin-top:-1px;
+		float:left;
+		margin-left:2px;
+		margin-right:5px;
+	}
+
+			.btn.link-btn.icon.facebook::before {
+				background-image:url(../img/assets/facebook.svg);
+			}
+			.btn.link-btn.icon.twitter::before {
+				background-image:url(../img/assets/twitter.svg);
+			}
+			.btn.link-btn.icon.linkedin::before{
+				background-image:url(../img/assets/linkedin.svg);
+			}
+			.btn.link-btn.icon.mail::before {
+				background-image:url(../img/assets/mail_white.svg);
+			}
+
+
+
+
+	.btn.share-btn {
+		/*background:linear-gradient(to bottom, #b2c7da, #93b1cc);*/
+		background:linear-gradient(to bottom, #3ca5ad, #038c96);
+	}
+
+	.social .btn.share-btn {
+		background:linear-gradient(to bottom, #ffcb3c, #eeaf00);
+	}
+
+		.facebook.social .btn.share-btn {
+			background:linear-gradient(to bottom, #008b95, #007c92); 
+		}
+
+		.twitter.social .btn.share-btn  {
+			background:linear-gradient(to bottom, #00b544, #009b3a); 
+		}
+
+	.news .btn.share-btn,
+	.news .btn.nav-btn  {
+		background:linear-gradient(to bottom, #b2c7da, #93b1cc);
+	}
+
+	
+
+
+
+
+
+
+	.btn.link-btn.download {
+		padding-left:8px;
+		background:linear-gradient(to bottom, #b2c7da, #93b1cc);
+	}
+
+		.btn.link-btn.download::before {
+			display:inline-block;
+			width:20px;
+			height:20px;
+			content:"";
+			background-repeat:no-repeat;
+			background-size:100% 100%;
+			background-image:url(../img/assets/download.svg);
+			font-size:0px;
+			margin-top:-1px;
+			float:left;
+			margin-left:2px;
+			margin-right:5px;
+		}
+
+
+
+
+
+
+.btn.nav-btn {
+	height:45px;
+	width:50px;
+	background:linear-gradient(to bottom, #3ca5ad, #038c96);
+}
+
+
+	.social .nav-btn {
+		background:linear-gradient(to bottom, #ffcb3c, #eeaf00);
+	}
+
+	.btn.nav-btn::after {
+		width:30px;
+		height:30px;
+	}
+
+
+		.facebook.social .nav-btn {
+			background:linear-gradient(to bottom, #008b95, #007c92); 
+		}
+
+		.twitter.social .nav-btn  {
+			background:linear-gradient(to bottom, #00b544, #009b3a); 
+		}
+
+
+
+
+.btn.save-btn {
+	background:linear-gradient(to bottom, #DC6622, #E05200);
+	color:#FFF;
+	text-transform:lowercase;
+	padding:7px 10px;
+}
+
+	.btn.save-btn.saved {
+		background:#008b95;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+.label {
+	display:block;
+	margin:5px;
+	border-radius:3px;
+	font-family:'calibri';
+	font-weight:normal;
+	color:#FFF;
+	font-size:15px;
+	text-decoration:none;
+	padding:5px 8px 2px 8px;
+	line-height:15px;
+	height:25px;
+	width:auto;
+	float:left;
+	clear:both;
+	background:linear-gradient(to bottom, #41a8af, #018c96);
+}
+
+		.label.icon-label {
+			padding:5px 0px 2px 8px;
+		}
+
+		.label.icon-label::after {
+			display:inline-block;
+			width:22px;
+			height:22px;
+			content:"";
+			background-repeat:no-repeat;
+			background-size:100% 100%;
+			float:right;
+			font-size:0px;
+			margin:0px;
+			margin-left:15px;
+			margin-top:-3px;
+			margin-right:3px;
+		}
+
+
+		.label.icon-label.warning {
+			background:linear-gradient(to bottom, #fed73f, #fecb01);
+		}
+
+
+		.label.icon-label.warning::after {
+			background-size:20px 20px;
+			background-image:url(../img/assets/warning.svg);
+		}
+
+
+.social .label {
+	background:linear-gradient(to bottom, #ffcb3c, #eeaf00);
+}
+	.facebook.social .label {
+		background:linear-gradient(to bottom, #008b95, #007c92); 
+	}
+
+	.twitter.social .label  {
+		background:linear-gradient(to bottom, #00b544, #009b3a); 
+	}
+
+
+
+
+time {
+	font-size:13px;
+}
