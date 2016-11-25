@@ -1,0 +1,25 @@
+{
+  "name": "wonenlimburg-app-backend",
+  "version": "0.0.1",
+  "dependencies": {
+    "gulp-bump": "^2.1.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.11.1",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-include": "^2.1.0",
+    "gulp-minify-css": "^1.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-replace-task": "^0.2.3",
+    "gulp-rev": "^7.0.0",
+    "gulp-sass": "^2.0.4",
+    "gulp-shell": "^0.5.2",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.6",
+    "run-sequence": "^1.1.2"
+  }
+}

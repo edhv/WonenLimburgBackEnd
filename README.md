@@ -1,9 +1,33 @@
-### Development
+## Based on https://github.com/Wodby/docker4wordpress
+phpmyadmin localhost:8001
 
-##### To use docker
-For convenience i've made Docker which contains a simple server
+Developed on Wordpress v.4.6.1 
 
-1. Download repository
-2. Update the wp-content folder with the correct plugins and uploads
-3. Put the lates export of the database inside the data folder as database.sql
-4. Run docker-compose
+NOtes
+- Wordpress page edit templates list is based on user level, and set in functions.php
+
+## Development
+gulp develop
+
+## Deploy
+gulp upload-dev
+
+## Requirement
+- Docker
+- Docker Compose
+- Npm
+- Gulp
+
+### Setup Docker environment
+- Clone this repo
+- Download the latest worpdress and past the contents in this folder, beware to not overwrite the wp-content folder
+- docker-compose up
+
+### Backup database
+docker-compose exec mariadb sh -c 'exec mysqldump --all-databases -uroot -p"root-password"' > databases.sql
+
+##docker exec daphnalaurenswebsite_web_1 /scripts/backup-db.sh
+
+### Restore database
+##Put the database as database.sql in the data folder
+##docker exec daphnalaurenswebsite_web_1 /scripts/restore-db.sh
