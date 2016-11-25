@@ -43,23 +43,23 @@ var path = {
 
 }
 
-var hosts = {
-  local: {
-    folder: 'wp-content/',
-    database: {
-      host: 'http://jeroens-macbook-pro.local/',
-      port: '3306',
-      name: 'wordpress',
-      user: 'root',
-      password: 'password'
-    },
-    wordpress: {
-      db_prefix: 'wp_',
-      domain: 'jeroens-macbook-pro.local:8080',
-      folder: 'a'
-    }
-  }
-}
+// var hosts = {
+//   local: {
+//     folder: 'wp-content/',
+//     database: {
+//       host: 'http://jeroens-macbook-pro.local/',
+//       port: '3306',
+//       name: 'wordpress',
+//       user: 'root',
+//       password: 'password'
+//     },
+//     wordpress: {
+//       db_prefix: 'wp_',
+//       domain: 'jeroens-macbook-pro.local:8080',
+//       folder: 'a'
+//     }
+//   }
+// }
 
 /*
 #
@@ -145,25 +145,25 @@ gulp.task('bump-major', function () {
 //   'rsync -av --progress --exclude "uploads" --exclude "plugins/daph-press/archives" --exclude "w3tc-config" --exclude "cache" --exclude "advanced-cache.php" ' + hosts.local.folder + ' ' + hosts.prod.user + '@' + hosts.prod.host + ':' + hosts.prod.root + hosts.prod.folder
 // ]))
 
-gulp.task('migrate-db-dev', shell.task([
-  './scripts/migrate-db.sh --target-user ' + hosts.dev.user +
-  ' --target-root-folder ' + hosts.dev.root +
-  ' --db-host ' + hosts.local.database.host +
-  ' --db-port ' + hosts.local.database.port +
-  ' --db-user ' + hosts.local.database.user +
-  ' --db-password ' + hosts.local.database.password +
-  ' --db-name ' + hosts.local.database.name +
-  ' --db-target-host ' + hosts.dev.database.host +
-  ' --db-target-user ' + hosts.dev.database.user +
-  ' --db-target-password ' + hosts.dev.database.password +
-  ' --db-target-name ' + hosts.dev.database.name +
-  ' --source-host ' + hosts.local.wordpress.domain +
-  ' --target-host ' + hosts.dev.wordpress.domain +
-  ' --source-wp-folder ' + hosts.local.wordpress.folder +
-  ' --target-wp-folder ' + hosts.dev.wordpress.folder +
-  ' --source-wp-db-prefix ' + hosts.local.wordpress.db_prefix +
-  ' --target-wp-db-prefix ' + hosts.dev.wordpress.db_prefix
-]))
+// gulp.task('migrate-db-dev', shell.task([
+//   './scripts/migrate-db.sh --target-user ' + hosts.dev.user +
+//   ' --target-root-folder ' + hosts.dev.root +
+//   ' --db-host ' + hosts.local.database.host +
+//   ' --db-port ' + hosts.local.database.port +
+//   ' --db-user ' + hosts.local.database.user +
+//   ' --db-password ' + hosts.local.database.password +
+//   ' --db-name ' + hosts.local.database.name +
+//   ' --db-target-host ' + hosts.dev.database.host +
+//   ' --db-target-user ' + hosts.dev.database.user +
+//   ' --db-target-password ' + hosts.dev.database.password +
+//   ' --db-target-name ' + hosts.dev.database.name +
+//   ' --source-host ' + hosts.local.wordpress.domain +
+//   ' --target-host ' + hosts.dev.wordpress.domain +
+//   ' --source-wp-folder ' + hosts.local.wordpress.folder +
+//   ' --target-wp-folder ' + hosts.dev.wordpress.folder +
+//   ' --source-wp-db-prefix ' + hosts.local.wordpress.db_prefix +
+//   ' --target-wp-db-prefix ' + hosts.dev.wordpress.db_prefix
+// ]))
 
 /* Docker */
 

@@ -20,14 +20,10 @@ gulp upload-dev
 
 ### Setup Docker environment
 - Clone this repo
-- Download the latest worpdress and past the contents in this folder, beware to not overwrite the wp-content folder
+- Download the latest worpdress and paste the contents in this folder, beware to not overwrite the wp-content folder
 - docker-compose up
 
 ### Backup database
 docker-compose exec mariadb sh -c 'exec mysqldump --all-databases -uroot -p"root-password"' > databases.sql
 
-##docker exec daphnalaurenswebsite_web_1 /scripts/backup-db.sh
 
-### Restore database
-##Put the database as database.sql in the data folder
-##docker exec daphnalaurenswebsite_web_1 /scripts/restore-db.sh
