@@ -82,11 +82,11 @@ if( class_exists('BuzzFeed_collection') ) {
 
 			// Compose object
 			$feed_object = new BuzzFeedWordpress_object();
-			$post_date = strtotime($post->post_date);
+			$post_date = $post->post_date;
 
 
 			$feed_object->set_url($post_url);
-			$feed_object->set_type($post->post_type);
+			$feed_object->set_type('nieuws');
 
 			$the_content = apply_filters('the_content', $post->post_content);
 
