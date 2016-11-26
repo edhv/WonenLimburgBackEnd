@@ -1,7 +1,7 @@
 /**
  * Simple plugin to send Push notification through onesignal. The system has a simple security mechanism in the
  * form of a confirmation message to make sure the user is not sending a push by accident.
- * 
+ * 	
  */
 jQuery(document).ready(function($){
 
@@ -42,6 +42,7 @@ jQuery(document).ready(function($){
 			var data = {
 				'action': 'send_push',
 				'title':title,
+				'post_id':wl_push_settings.post_id,
 				'message':message,
 				'target':options.target
 			};
@@ -49,6 +50,7 @@ jQuery(document).ready(function($){
 			//console.log()
 			// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
 			jQuery.post(ajaxurl, data, function(response) {
+				console.log(response)
 				var response = JSON.parse(response);
 
 				if (!response.status) {

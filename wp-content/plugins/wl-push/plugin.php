@@ -82,6 +82,7 @@ if (!class_exists('WL_Push'))
 		function send_push_message($data) {
 
 			global $post;
+
 			$return = array();
 
 			$titel = $_POST['title'];
@@ -89,7 +90,7 @@ if (!class_exists('WL_Push'))
 			// onesignal paramters
 			$parameters = array(
 					'app_id' => $this->settings['onesignal_id'],
-					'data' => array('id'=>$post->ID),
+					'data' => array('id'=>$_POST['post_id']),
 					);
 
 				// define the target
