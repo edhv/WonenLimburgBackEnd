@@ -43,6 +43,7 @@ node_modules
 !gulp.json
 !docker-compose.yml
 !package.json
+!database.sql
 
 # except sub directories
 !/wp-content
