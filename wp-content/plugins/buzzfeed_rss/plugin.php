@@ -274,7 +274,6 @@ if( class_exists('BuzzFeed') ) {
 			$offset = 0;
 			$type = 'nieuws';
 			$nr_of_feeds = 20;
-
 			if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
 			if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']; }
 			if (isset($arguments['type'])) { $type = $arguments['source']; }

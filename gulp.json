@@ -1,0 +1,12 @@
+{
+	"theme": "cultuur-eindhoven",
+	"productionAssetURL": "",
+	"docker": {
+		"machine":"default"
+	},
+	"browserSync": {
+		"development": {
+			"proxy":"jeroens-macbook-pro.local:8000"
+		}
+	}
+}

@@ -70,6 +70,44 @@ if( class_exists('BuzzFeed_collection') ) {
 
 		/* GETTERS ------------------ */
 
+		/** Function to get a single item */
+		function getItem($id, $source) {
+
+			$post = get_post($id);
+
+			if (!$post) return false;
+
+			$post_id    = $post->ID;
+			$post_url   = get_field('url', $post_id);
+
+			// Compose object
+			$feed_object = new BuzzFeedWordpress_object();
+			$post_date = $post->post_date;
+
+
+			$feed_object->set_url($post_url);
+			$feed_object->set_type('nieuws');
+
+			$the_content = apply_filters('the_content', $post->post_content);
+
+			$photo_url = wp_get_attachment_url(get_post_meta($post_id, 'bericht_img', true));
+			$post->post_content = get_field('bericht_text',$post_id);
+			$post->post_type = get_field('bericht_type',$post_id)."bericht";
+			$the_content = get_field('bericht_text',$post_id);
+	
+
+			$feed_object->set_media($photo_url);
+
+			$feed_object->set_feed_id($post_id);
+			$feed_object->set_timestamp($post_date);
+			$feed_object->set_date($post_date);
+			$feed_object->set_title($post->post_title);
+
+			$feed_object->set_text($the_content);
+
+			return $feed_object;
+		}
+
 		/* Get wordpress feed */
 		function import($settings, $source, $nr_of_feeds, $lat = NULL, $long = NULL, $radius = 5, $startdate, $enddate,$offset=NULL, $types = array(), $regio = array(), $afdeling=NULL,$naam=NULL,$sort=NULL )
 		{	
@@ -577,19 +615,25 @@ if( class_exists('BuzzFeed') ) {
 			if (isset($arguments['afdeling'])) { $afdeling = $arguments['afdeling']; }
 			if (isset($arguments['naam'])) { $naam = $arguments['naam']; }
 			if (isset($arguments['sort'])) { $sort = $arguments['sort']; }
-			
-			// reset the feed before import to clean up the content of the feeds array.
-			// somehow this was a problem resulting in many 'melding' type of posts in the feed
-			$this->feeds_collection->feeds = []; 
 
-			$this->feeds_collection->import($this->settings['wordpress'],$source, $nr_of_feeds,0,0,5,$startdate,$enddate,$offset,$types, $regio, $afdeling,$naam,$sort);
 
-			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
-			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
+			// check if an id is given, of so we only need to get that specific item
+			if (array_key_exists('id', $arguments)) {
+				return array("status_code"=>1,"response"=>$this->feeds_collection->getItem($arguments['id'], $source));
+			} else {
 
-			// Return status and response
-			return array("status_code" => 1,"totalamount" => $this->feeds_collection->total , "response" => $this->feeds_collection->feeds);
+				// reset the feed before import to clean up the content of the feeds array.
+				// somehow this was a problem resulting in many 'melding' type of posts in the feed
+				$this->feeds_collection->feeds = []; 
 
+				$this->feeds_collection->import($this->settings['wordpress'],$source, $nr_of_feeds,0,0,5,$startdate,$enddate,$offset,$types, $regio, $afdeling,$naam,$sort);
+
+				$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
+				$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
+
+				// Return status and response
+				return array("status_code" => 1,"totalamount" => $this->feeds_collection->total , "response" => $this->feeds_collection->feeds);
+			}
 
 		}
 
