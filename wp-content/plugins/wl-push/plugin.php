@@ -1,32 +1,32 @@
 <?php
 /**
  * Plugin Name: Wonen Limburg News Push
- * Plugin URI: 
+ * Plugin URI:
  * Description:
  * Version: 0.1
  * Author: Jeroen Braspenning
- * Author URI: 
- * License: 
+ * Author URI:
+ * License:
  */
 
 
 
-if (!class_exists('WL_Push')) 
+if (!class_exists('WL_Push'))
 {
 
 	/**
-	* 
+	*
 	*/
 	class WL_Push
 	{
-		
+
 
 		/**
 		 * 	get_instance
-		 *  
+		 *
 		 * 	returns the singleton instance of this class
 		 *  @return Singleton instance
-		 * 
+		 *
 		 */
 	    public static function get_instance()
 	    {
@@ -41,9 +41,9 @@ if (!class_exists('WL_Push'))
 
 		/**
 		 * 	constructor
-		 * 	
+		 *
 		 */
-		
+
 		function __construct()
 		{
 
@@ -56,6 +56,7 @@ if (!class_exists('WL_Push'))
 				'test_users'=>array(
 					"5adb310a-27a0-4953-bb07-d01f6874dce1", // jeroen ipad
 					"3f614866-9e50-4cb5-a57c-25a994235b6d", // jeroen android emulator
+          "b183e905-0b59-4fa8-a9ca-9e2b2c96101b"  // EDHV iPad
 				)
 			);
 
@@ -70,12 +71,12 @@ if (!class_exists('WL_Push'))
 
 		/**
 		 * 	init
-		 *  
+		 *
 		 * 	Initialize the main parts of the projects plugin
-		 * 	
+		 *
 		 */
-		
-		function init() 
+
+		function init()
 		{
 		}
 
@@ -112,20 +113,20 @@ if (!class_exists('WL_Push'))
 			}
 
 			// prepare the data string
-			$data_string = json_encode($parameters);                                                                                   
-	          
-	    // setup curl                                                                                                           
-			$ch = curl_init($this->settings['onesignal_url']);                                                                      
-			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);                                                                  
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-			    'Content-Type: application/json',            
+			$data_string = json_encode($parameters);
+
+	    // setup curl
+			$ch = curl_init($this->settings['onesignal_url']);
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			    'Content-Type: application/json',
 			    'authorization: Basic '.$this->settings['onesignal_key'],
-			    'cache-control: no-cache',                                                                    
-			    'Content-Length: ' . strlen($data_string))                                                                       
-			);                                                                                                                   
-	                                                                                                                     
+			    'cache-control: no-cache',
+			    'Content-Length: ' . strlen($data_string))
+			);
+
 			$result = curl_exec($ch);
 			$err = curl_error($ch);
 			curl_close($ch);
@@ -149,7 +150,7 @@ if (!class_exists('WL_Push'))
 		function wpdocs_register_meta_boxes() {
 		    add_meta_box( 'meta-box-id', 'Nieuws Push Bericht', array($this, 'wpdocs_my_display_callback'), 'bericht','side' );
 		}
-		 
+
 		/**
 		 * Meta box display callback.
 		 *
@@ -177,7 +178,7 @@ if (!class_exists('WL_Push'))
 					<label for="">Titel</label>
 				</div>
 				<div class="acf-input">
-					<div class="acf-input-wrap"><input type="text" class="js-push-title" placeholder="Titel" value="'.$post->post_title.'"></div>		
+					<div class="acf-input-wrap"><input type="text" class="js-push-title" placeholder="Titel" value="'.$post->post_title.'"></div>
 				</div>
 			</div>';
 
@@ -186,7 +187,7 @@ if (!class_exists('WL_Push'))
 					<label for="">Bericht</label>
 				</div>
 				<div class="acf-input">
-					<div class="acf-input-wrap"><textarea rows="5" class="js-push-message" placeholder="Bericht"></textarea>		
+					<div class="acf-input-wrap"><textarea rows="5" class="js-push-message" placeholder="Bericht"></textarea>
 				</div>
 			</div><br/>';
 			$html .= '<a class="button button-primary button-large js-send-push">Bericht verzenden</a><span class="spinner js-push-spinner"></span>';
@@ -206,7 +207,7 @@ if (!class_exists('WL_Push'))
 			if ( 'post.php' != $hook ) {
 				return;
 			}
-			
+
 			$this->settings['post_id'] = $post->ID;
 			$this->settings['post_title'] = $post->post_title;
 
@@ -223,19 +224,19 @@ if (!class_exists('WL_Push'))
 	 *
 	 * 	Main function which ensures that wl_push is initiated only once
 	 *  Also this allows to call wl_push(); like a global variable everywhere
-	 * 	
+	 *
 	 *  @return Object
 	 */
 
 	function wl_push()
 	{
 		global $wl_push;
-		
+
 		if(!isset($wl_push))
 		{
 			$wl_push = WL_Push::get_instance();
 		}
-		
+
 		return $wl_push;
 	}
 
