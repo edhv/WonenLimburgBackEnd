@@ -6,9 +6,19 @@ Plugin URI:
 Description: Get an RSS feed
 Author: Jeroen Braspenning
 Author URI: www.edhv.nl
+<<<<<<< HEAD
 Version: 1.0.2
 Text Domain:
+=======
+Version: 1.0.3
+Text Domain:
+>>>>>>> 339a2502a318930657b3216fd2fbc183bfd29c67
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+It's better to rename this plugin to a news fetcher instead of an rss fetcher. Because the app was already in the appstore
+and  the client wanted to merge news from the rss feed and news from wordpress i've combined these functionalities inside this
+plugin. There is a merge function which combines two arrays and sorts them based on the timestamp.
+
 */
 
 
@@ -234,20 +244,45 @@ if( class_exists('BuzzFeed') ) {
 		}
 
 
+		// functo
+		function merge_feeds_timebased($feedsArray) {
+
+			$itemArray = array();
+
+			foreach ($feedsArray as $feedKey => $feedValue) {
+
+				foreach ($feedsArray[$feedKey] as $key => $value) {
+
+					// make sure the type is right, if not rename
+					if ($value->type == "bericht") {
+						$value->type = "nieuws";
+					}
+
+					$itemArray[$value->timestamp] = $value;
+				}
+			}
+
+			krsort($itemArray);
+
+			return array_values($itemArray);
+		}
+
 
 		function get_feeds($arguments) {
 
 			// // defaults
 			$offset = 0;
 			$type = 'nieuws';
-			$nr_of_feeds = 40;
+			$nr_of_feeds = 20;
 
 			if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
 			if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']; }
 			if (isset($arguments['type'])) { $type = $arguments['source']; }
 
+
 			// if the system is cached, don't re import
           	if(!$this->feeds_collection->has_cache) {
+          		$this->feeds_collection->feeds = array();
           		$this->feeds_collection->import($this->settings, $type, $nr_of_feeds, NULL, NULL, 0, 0,0);
           	}
 
@@ -255,8 +290,22 @@ if( class_exists('BuzzFeed') ) {
 			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
 			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
 
+			// get the wordpress news
+			$wordpressNews = apply_filters('wordpress/get_feeds', array(
+				"source"=>"bericht",
+				"nr_of_feeds"=>20
+				));
+
+
+			// merge the feeds
+			$mergedFeeds = $this->merge_feeds_timebased(array($wordpressNews['response'],$this->feeds_collection->feeds));
+
+			// slice the array to return the requested amount of items
+			$slicedArray = array_slice($mergedFeeds, $offset*$nr_of_feeds, $nr_of_feeds);
+
 			// Return status and response
-			return array("status_code"=>1,"totalamount"=>$this->feeds_collection->total,"response"=>$this->feeds_collection->feeds);
+			//return array("status_code"=>1,"totalamount"=>$this->feeds_collection->total,"response"=>$this->feeds_collection->feeds);
+			return array("status_code"=>1,"totalamount"=>$this->feeds_collection->total+$wordpressNews['totalamount'],"response"=>$slicedArray);
 
 
 
