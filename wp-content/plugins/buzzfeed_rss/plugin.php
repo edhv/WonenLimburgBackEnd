@@ -2,12 +2,12 @@
 
 /*
 Plugin Name: Buzzfeed Rss
-Plugin URI: 
+Plugin URI:
 Description: Get an RSS feed
 Author: Jeroen Braspenning
 Author URI: www.edhv.nl
 Version: 1.0.2
-Text Domain: 
+Text Domain:
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
 
@@ -15,7 +15,7 @@ License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2
 
 /* ------------------------------------------------------------------------ */
 if( class_exists('BuzzFeed_object') ) {
-	
+
 	class BuzzFeedRss_object extends BuzzFeed_object {
 
 
@@ -49,7 +49,7 @@ if( class_exists('BuzzFeed_collection') ) {
 			$json = json_encode($xmlObject);
 			$rssArray = json_decode($json,TRUE);
 
-			$items = $rssArray['channel']['item'];
+			$items = array($rssArray['channel']['item']);
 
 			// walk through the rss items
 			foreach ($items as $index => $rssItem) {
@@ -64,7 +64,7 @@ if( class_exists('BuzzFeed_collection') ) {
 				$feed_object->set_text($rssItem['description']);
 				$feed_object->set_media("");
 
-				
+
 
 
 
@@ -122,11 +122,11 @@ if( class_exists('BuzzFeed_collection') ) {
 			$articleText = false;
 
 			// check if we already have a cached version of this url
-			
+
 			//$content = file_get_contents($url);
 			$html = file_get_html($url);
 
-			// image 
+			// image
 			$domImages = $html->find('#contentblock img');
 			if (isset($domImages[0])) {
 				if (isset($domImages[0]->src)) {
@@ -144,7 +144,7 @@ if( class_exists('BuzzFeed_collection') ) {
 			foreach($html->find('#contentblock .document a') as $item) {
 			    $item->outertext = $item->innertext;
 			}
-	
+
 			$html->save();
 
 
@@ -216,7 +216,7 @@ if( class_exists('BuzzFeed') ) {
 			);
 
 
-			$this->feeds_collection = new BuzzFeedRss_collection(); 
+			$this->feeds_collection = new BuzzFeedRss_collection();
 			$this->feeds_collection->set_type($this->slug);
 
 			// Construct the parent()
@@ -250,7 +250,7 @@ if( class_exists('BuzzFeed') ) {
           	if(!$this->feeds_collection->has_cache) {
           		$this->feeds_collection->import($this->settings, $type, $nr_of_feeds, NULL, NULL, 0, 0,0);
           	}
-          	
+
 			$this->feeds_collection->sort_feeds();
 			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
 			$this->feeds_collection->feeds = array_values($this->feeds_collection->feeds);
