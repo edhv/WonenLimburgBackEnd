@@ -56,7 +56,8 @@ if (!class_exists('WL_Push'))
 				'test_users'=>array(
 					"5adb310a-27a0-4953-bb07-d01f6874dce1", // jeroen ipad
 					"3f614866-9e50-4cb5-a57c-25a994235b6d", // jeroen android emulator
-          "b183e905-0b59-4fa8-a9ca-9e2b2c96101b"  // EDHV iPad
+          "b183e905-0b59-4fa8-a9ca-9e2b2c96101b",  // EDHV iPad
+          "68a58235-609f-44aa-9387-bf3acea4206d"// EDHV iPad
 				)
 			);
 

@@ -2,23 +2,23 @@
 
 /*
 Plugin Name: Buzzfeed All
-Plugin URI: 
+Plugin URI:
 Description: Get all feeds
 Author: Ties Kuypers, global structure by Jeroen Braspenning
-Author URI: 
+Author URI:
 Version: 1.0.2
-Text Domain: 
+Text Domain:
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
 
 
 /* ------------------------------------------------------------------------ */
 if( class_exists('BuzzFeed_object') ) {
-	
+
 	class BuzzFeedAll_object extends BuzzFeed_object {
 
 		// Setters overwrite
-		
+
 
 	}
 
@@ -37,7 +37,7 @@ if( class_exists('BuzzFeed_collection') ) {
 	class BuzzFeedAll_collection extends BuzzFeed_collection {
 
 
-		
+
 
 		/* GETTERS ------------------ */
 
@@ -46,7 +46,7 @@ if( class_exists('BuzzFeed_collection') ) {
 		private $feed_array = array
 		(
 
-	
+
 			//array('youtube', 'user', 'UCoP_KWmDZo8I4xeotYYGAmg', '1'),
 			array('socialmedia', '', '', '1'),
 			array('rss', 'tag', 'nieuws', '2'),
@@ -62,7 +62,7 @@ if( class_exists('BuzzFeed_collection') ) {
             array('wordpress', 'tag', 'meldingen', '1'),
             array('wordpress', 'tag', 'intro', '1'),
 
-          
+
 		);
 
 		private $feed_order = array(
@@ -121,34 +121,34 @@ if( class_exists('BuzzFeed_collection') ) {
 
 
 		/*
-		function get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type = 'home', $lat = NULL, $long = NULL, $radius = 5) 
-		{	
+		function get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type = 'home', $lat = NULL, $long = NULL, $radius = 5)
+		{
 
 
-		
-			if($type_of_data == '-') 
+
+			if($type_of_data == '-')
 			{
 				$type_of_data = '';
 			}
-		
+
 			if($source == '-')
 			{
 				$source = '';
 			}
-		
-	      
+
+
 			// Basic url
 			$has_geo = false;
 			$url     = 'http://www.mijnwonenlimburg.nl/app/api/feed/';
-			
+
 			$param = '';
-			
+
 			// Social Media
 			if($sourcetype == 'socialmedia')
 			{
 				if($type_of_data == 'user') {
-					$param = 'source='.$source.'';	
-				} 
+					$param = 'source='.$source.'';
+				}
 			}
 
 
@@ -156,34 +156,34 @@ if( class_exists('BuzzFeed_collection') ) {
 			if($sourcetype == 'facebook')
 			{
 				if($type_of_data == 'user') {
-					$param = 'source='.$source.'';	
+					$param = 'source='.$source.'';
 				} else if($type_of_data == 'event') {
 					$has_geo = true;
 					$param  = 'source=event/'.$source.'';
 				}
 			}
-			
+
 			// Instagram @todo: geo?
 			if($sourcetype == 'instagram')
 			{
 				if($type_of_data == 'user') {
-					$param = 'source='.$source.'';	
+					$param = 'source='.$source.'';
 				} else if($type_of_data == 'tag') {
 					$param  = 'source=hash/'.$source.'';
 				}
 			}
-			
+
 			// Twitter
 			if($sourcetype == 'twitter')
 			{
 				if($type_of_data == 'user') {
-					$param = 'source='.$source.'';	
+					$param = 'source='.$source.'';
 				} else if($type_of_data == 'tag') {
 					$has_geo = true;
 					$param  = 'source=hash/'.$source.'';
 				}
 			}
-			
+
 			// Twitter
 			if($sourcetype == 'twitter')
 			{
@@ -194,61 +194,61 @@ if( class_exists('BuzzFeed_collection') ) {
 				}
 			}
 
-			
-			
+
+
 			// Wordpress
 			if($sourcetype == 'wordpress')
 			{
 				if($source != '')
 				{
-					$param = 'source='.$source.'';	
+					$param = 'source='.$source.'';
 				}
 			}
-			
-			
-			
+
+
+
 			// Youtube
 			if($sourcetype == 'youtube')
 			{
 				if($type_of_data == 'user') {
-					$param = 'source='.$source.'';	
+					$param = 'source='.$source.'';
 				}
 				$has_geo = true;
 			}
-			
-		
-		
-			
-			
+
+
+
+
+
 			// Set the url
-			$url .= $sourcetype.'/get_feeds/?'.$param.'&nr_of_feeds='.$number_of_items.''; 
-			
+			$url .= $sourcetype.'/get_feeds/?'.$param.'&nr_of_feeds='.$number_of_items.'';
+
 			// Add the geo
 			if($has_geo == true && $lat != NULL && $long != NULL)
 			{
 				$url .= '&geo='.$lat.','.$long;
-				
+
 				if($radius != NULL)
 				{
-					$url .= '&radius='.$radius;	
+					$url .= '&radius='.$radius;
 				}
 			}
-			
+
 			return $url;
 		}
-		
+
 		*/
-		
-		
-	
+
+
+
 
 		/* Get wordpress feed */
 		function get_all_feeds($types=array(),$nr_of_feeds='')
-		{	
+		{
 
 			// Cache the data
 			//$use_cache = (isset($_GET['use_cache'])) ? TRUE : FALSE;
-				
+
 
 			// if ($this->has_cache('all_feeds')) {
 			// 	$this->fetch_cache('all_feeds');
@@ -267,10 +267,10 @@ if( class_exists('BuzzFeed_collection') ) {
 					'posts_per_page'=> -1,
 					'order'		=>	'ASC',
 					'search_post_title' => $types
-									  
+
 					  	);
 			$query    = new WP_Query($args);
-			
+
 			$source_array = $this->feed_array;
 
 			$feeds[] = $source_array[11];
@@ -278,18 +278,18 @@ if( class_exists('BuzzFeed_collection') ) {
 			// turned off 'home' meldingen
 			//array_unshift($types,'meldingen');
 
-			foreach($query->posts as $feedurl){	
-				
+			foreach($query->posts as $feedurl){
+
 				switch ($feedurl->post_title) {
-					
-	
+
+
 					case 'socialmedia':
 						$feeds[] = $source_array[0];
 						break;
 
 					case 'bericht':
 						$feeds[] = $source_array[1];
-						break;		
+						break;
 
 					case 'wieiswie':
 						$feeds[] = $source_array[2];
@@ -310,7 +310,7 @@ if( class_exists('BuzzFeed_collection') ) {
 					case 'jaarverslag':
 						$feeds[] = $source_array[6];
 						break;
-					
+
 					case 'koopenwoon':
 						$feeds[] = $source_array[7];
 						break;
@@ -332,7 +332,7 @@ if( class_exists('BuzzFeed_collection') ) {
 						$feeds[] = $source_array[12];
 						break;
 
-	
+
 					default:
 						# code...
 						break;
@@ -348,7 +348,7 @@ if( class_exists('BuzzFeed_collection') ) {
 
 					if ($feed[0] === 'rss' && $feed[2] === $type) {
 						$feeds[] = $feed;
-					} 
+					}
 				}
 			}
 
@@ -358,17 +358,17 @@ if( class_exists('BuzzFeed_collection') ) {
 
 
 			foreach($feeds as $items)
-			{	
-				
+			{
+
 				if($items[0]=='wordpress'){
-			
-					
+
+
 
 					if(in_array($items[2],$types)){
 
 						/*
 						$url = call_user_func_array('self::get_source_url', $items); //$this->get_source_url($sourcetype, $type_of_data, $source, $number_of_items, $type, $lat, $long, $radius);
-											
+
 						$ch = curl_init();
 						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -403,7 +403,7 @@ if( class_exists('BuzzFeed_collection') ) {
 						curl_setopt($ch, CURLOPT_URL, $url);
 						$result = json_decode(curl_exec($ch));
 						curl_close($ch);
-						
+
 						//Add the result
 						$this->feeds[] = $result;
 						*/
@@ -423,10 +423,10 @@ if( class_exists('BuzzFeed_collection') ) {
 						$this->unsortedFeeds[] = $result;
 					}
 
-				
+
 
 				}
-				
+
 			}
 
 			// sort the unsortedfeeds to resemble the given order in the types arguments
@@ -436,10 +436,12 @@ if( class_exists('BuzzFeed_collection') ) {
 
 				foreach ($this->unsortedFeeds as $feed) {
 
-					if ($type === $feed['response'][0]->type) {
-						//print_r($feed);
-						//echo "ja";
-						$this->feeds[] = $feed;
+					if (isset($feed['response'][0])) {
+						if ($type === $feed['response'][0]->type) {
+							//print_r($feed);
+							//echo "ja";
+							$this->feeds[] = $feed;
+						}
 					}
 					//echo $feed['response'][0]->type;
 					# code...
@@ -483,7 +485,7 @@ if( class_exists('BuzzFeed') ) {
             "types" => ["intro","home","socialmedia","boekenkast","huurdersraad","koopenwoon","werkenbij","bericht","jaarverslag","brochure","kalender","wieiswie","buurtvan"]
             );
 
-			$this->feeds_collection = new BuzzFeedAll_collection(); 
+			$this->feeds_collection = new BuzzFeedAll_collection();
 			$this->feeds_collection->set_type($this->slug);
 
 			// Construct the parent()
@@ -507,7 +509,7 @@ if( class_exists('BuzzFeed') ) {
 		function get_feeds($arguments) {
 
 			$types     = $this->settings['types'];
-			$nr_of_feeds = 12; 
+			$nr_of_feeds = 12;
 			$offset = 0;
 
 			if (isset($arguments['types'])) { $types = $arguments['types']; $types = explode(",",$types);	array_unshift($types,'home'); }

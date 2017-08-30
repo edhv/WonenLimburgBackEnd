@@ -1,13 +1,13 @@
 <?php get_header(); ?>
 
  <style>
-    
+
     body{
       background: url(http://ogz.expertees.nl/demo/img/ipad.png) center center no-repeat;
          }
 
     body, html{
-      
+
       height:100%;
       overflow: hidden;
 
@@ -28,8 +28,8 @@
       </head>
   <body>
     <p id="modelviewer">
-      <iframe src="http://wonenlimburg.expertees.nl" width="1024" height="769" frameborder="0" seamless allowfullscreen webkitallowfullscreen></iframe>
-
+      <!-- <iframe src="http://wonenlimburg.expertees.nl" width="1024" height="769" frameborder="0" seamless allowfullscreen webkitallowfullscreen></iframe> -->
+      <iframe src="http://www.jeroenbraspenning.nl/clients/edhv/mijnwonenlimburg/index.html" width="1024" height="769" frameborder="0" seamless allowfullscreen webkitallowfullscreen></iframe>
   </p>
       </body>
 <?php get_footer(); ?>

@@ -4,7 +4,7 @@
 * Plugin Name: Buzzfeeds API
 * Plugin URI: 
 * Description: 
-* Version: 0.2
+* Version: 0.1
 * Author: Jeroen Braspenning, Edhv
 * Author URI: http://www.jeroenbraspenning.nl
 * License: 

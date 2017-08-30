@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
     <meta charset="utf-8">
-    <title>Mijn Wonen Limburg</title>
+    <title>Wonen Limburg</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- styles -->
@@ -28,7 +28,3 @@
   </head>
   <body>
     <div id="container">
-
-  
-
-  

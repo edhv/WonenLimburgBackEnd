@@ -2,12 +2,12 @@
 
 /*
 Plugin Name: Buzzfeed Rss
-Plugin URI: 
+Plugin URI:
 Description: Get an RSS feed
 Author: Jeroen Braspenning
 Author URI: www.edhv.nl
 Version: 1.0.3
-Text Domain: 
+Text Domain:
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 It's better to rename this plugin to a news fetcher instead of an rss fetcher. Because the app was already in the appstore
@@ -20,7 +20,7 @@ plugin. There is a merge function which combines two arrays and sorts them based
 
 /* ------------------------------------------------------------------------ */
 if( class_exists('BuzzFeed_object') ) {
-	
+
 	class BuzzFeedRss_object extends BuzzFeed_object {
 
 
@@ -53,45 +53,42 @@ if( class_exists('BuzzFeed_collection') ) {
 			$xmlObject = simplexml_load_string($feedObject, null, LIBXML_NOCDATA);
 			$json = json_encode($xmlObject);
 			$rssArray = json_decode($json,TRUE);
-			
-			if (isset($rssArray['channel']['item'])) {
-			
-				$items = $rssArray['channel']['item'];
+			$items = $rssArray['channel']['item'];
+            print_r("-------------------------------------");
+            print_r($items);
+            print_r("-------------------------------------");
+            foreach ($items as $index => $rssItem) {
+                $feed_object = new BuzzFeedRss_object();
 
-				// walk through the rss items
-				foreach ($items as $index => $rssItem) {
-
-					$feed_object = new BuzzFeedRss_object();
-
-					$feed_object->set_type($source);
-					$feed_object->set_feed_id($rssItem['guid']);
-					$feed_object->set_timestamp(strtotime($rssItem['pubDate']));
-					$feed_object->set_date(strtotime($rssItem['pubDate']));
-					$feed_object->set_title($rssItem['title']);
-					$feed_object->set_text($rssItem['description']);
-					$feed_object->set_media("");
-
-					
+                $feed_object->set_type($source);
+                $feed_object->set_feed_id($rssItem['guid']);
+                $feed_object->set_timestamp(strtotime($rssItem['pubDate']));
+                $feed_object->set_date(strtotime($rssItem['pubDate']));
+                $feed_object->set_title($rssItem['title']);
+                $feed_object->set_text($rssItem['description']);
+                $feed_object->set_media("");
 
 
 
-					//
-					$fullContent = $this->scrapeUrlContents($rssItem['guid'], strtotime($rssItem['pubDate']));
 
-					if ($fullContent['text']) {
-						$feed_object->set_text($fullContent['text']);
-					}
 
-					if ($fullContent['img']) {
-						$feed_object->set_media($fullContent['img']);
-					}
+                //
+                $fullContent = $this->scrapeUrlContents($rssItem['guid'], strtotime($rssItem['pubDate']));
 
-					$this->feeds[] = $feed_object;
+                if ($fullContent['text']) {
+                    $feed_object->set_text($fullContent['text']);
+                }
 
-				}
+                if ($fullContent['img']) {
+                    $feed_object->set_media($fullContent['img']);
+                }
 
-				$this->total = count($items);
-			}
+                $this->feeds[] = $feed_object;
+                $counter++;
+            }
+
+			$this->total = count($items);
+
 			//Set the cache
 			$this->set_cache();
 
@@ -129,11 +126,11 @@ if( class_exists('BuzzFeed_collection') ) {
 			$articleText = false;
 
 			// check if we already have a cached version of this url
-			
+
 			//$content = file_get_contents($url);
 			$html = file_get_html($url);
 
-			// image 
+			// image
 			$domImages = $html->find('#contentblock img');
 			if (isset($domImages[0])) {
 				if (isset($domImages[0]->src)) {
@@ -151,7 +148,7 @@ if( class_exists('BuzzFeed_collection') ) {
 			foreach($html->find('#contentblock .document a') as $item) {
 			    $item->outertext = $item->innertext;
 			}
-	
+
 			$html->save();
 
 
@@ -223,7 +220,7 @@ if( class_exists('BuzzFeed') ) {
 			);
 
 
-			$this->feeds_collection = new BuzzFeedRss_collection(); 
+			$this->feeds_collection = new BuzzFeedRss_collection();
 			$this->feeds_collection->set_type($this->slug);
 
 			// Construct the parent()
@@ -271,6 +268,7 @@ if( class_exists('BuzzFeed') ) {
 			$offset = 0;
 			$type = 'nieuws';
 			$nr_of_feeds = 20;
+
 			if (isset($arguments['offset'])) { $offset = $arguments['offset']; }
 			if (isset($arguments['nr_of_feeds'])) { $nr_of_feeds = $arguments['nr_of_feeds']; }
 			if (isset($arguments['type'])) { $type = $arguments['source']; }
@@ -282,7 +280,7 @@ if( class_exists('BuzzFeed') ) {
           		$this->feeds_collection->import($this->settings, $type, $nr_of_feeds, NULL, NULL, 0, 0,0);
           	}
           	//
-          
+
 
 			$this->feeds_collection->sort_feeds();
 			$this->feeds_collection->feeds = array_slice($this->feeds_collection->feeds, $offset, $nr_of_feeds);
@@ -296,7 +294,7 @@ if( class_exists('BuzzFeed') ) {
 
 
 			// merge the feeds
-			$mergedFeeds = $this->merge_feeds_timebased(array($wordpressNews['response'],$this->feeds_collection->feeds));
+			$mergedFeeds = $this->merge_feeds_timebased(array($wordpressNews['response'], $this->feeds_collection->feeds));
 
 			// slice the array to return the requested amount of items
 			$slicedArray = array_slice($mergedFeeds, $offset*$nr_of_feeds, $nr_of_feeds);

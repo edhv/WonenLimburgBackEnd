@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 
 function wpbootstrap_scripts_with_jquery()
@@ -19,19 +19,19 @@ function wpse18703_posts_where( $where, &$wp_query )
     global $wpdb;
 
     if ( $wpse18703_title = $wp_query->get( 'search_post_title' ) ) {
-                
+
       $i = count($wpse18703_title)-1;
-      $where .= ' AND (' . $wpdb->posts . '.post_title LIKE \''; 
-      
+      $where .= ' AND (' . $wpdb->posts . '.post_title LIKE \'';
+
       for ($y = 0; $y <= $i; $y++) {
-        
+
         if($y >=1){
         $where .= ' OR '.$wpdb->posts . '.post_title LIKE \'';}
 
        $where .= esc_sql( $wpdb->esc_like( $wpse18703_title[$y])). '\' ';
       }
       $where .= ')';
-   
+
     }
     return $where;
 }
@@ -41,25 +41,25 @@ function wpse18705_posts_where( $where, &$wp_query )
     global $wpdb;
 
     if ( $wpse18703_title = $wp_query->get( 'search_name' ) ) {
-                
+
       $i = count($wpse18703_title)-1;
-      $where .= ' AND ' . $wpdb->posts . '.post_title LIKE \''; 
+      $where .= ' AND ' . $wpdb->posts . '.post_title LIKE \'';
       $where .= '%'.esc_sql( $wpdb->esc_like( $wpse18703_title)). '%\' ';
     }
 
     return $where;
 }
 
-function post_remove () 
-{ 
+function post_remove ()
+{
    remove_menu_page('edit.php');
    remove_menu_page('edit-comments.php');
    //remove_menu_page('edit.php?post_type=page');
-} 
+}
 
 function codex_custom_init() {
 
-$args = array( 
+$args = array(
     'label' => 'Home',
     'public' => true,
     'menu_icon'=>'dashicons-admin-home',
@@ -75,7 +75,7 @@ $args = array(
     );
   register_post_type( 'home', $args );
 
-$args = array( 
+$args = array(
     'label' => 'Berichten',
     'public' => true,
     'menu_icon'=>'dashicons-welcome-write-blog',
@@ -91,7 +91,7 @@ $args = array(
     );
   register_post_type( 'bericht', $args );
 
- 	$args = array( 
+ 	$args = array(
  		'label' => 'Wie is wie',
  		'public' => true,
     'menu_icon'=>'dashicons-groups',
@@ -107,7 +107,7 @@ $args = array(
  		);
  	register_post_type( 'wieiswie', $args );
 
-    $args = array( 
+    $args = array(
     'label' => 'Brochures',
     'public' => true,
     'menu_icon'=>'dashicons-format-aside',
@@ -124,7 +124,7 @@ $args = array(
   register_post_type( 'brochure', $args );
 
 
-    $args = array( 
+    $args = array(
     'label' => 'In de Buurt van',
     'public' => true,
     'menu_icon'=>'dashicons-media-default',
@@ -140,7 +140,7 @@ $args = array(
     );
   register_post_type( 'buurtvan', $args );
 
-   $args = array( 
+   $args = array(
     'label' => 'Jaarverslagen',
     'public' => true,
     'menu_icon'=>'dashicons-chart-bar',
@@ -156,7 +156,7 @@ $args = array(
     );
   register_post_type( 'jaarverslag', $args );
 
-    $args = array( 
+    $args = array(
     'label' => 'Kalender',
     'public' => true,
     'menu_icon'=>'dashicons-calendar-alt',
@@ -171,27 +171,27 @@ $args = array(
     'menu_position' => 11
     );
   register_post_type( 'kalender', $args );
-
-    $args = array( 
-    'label' => 'Meldingen',
-    'public' => true,
-    'menu_icon'=>'dashicons-megaphone',
-    'supports' => array(
-      'title',
-      'editor',
-      'excerpt',
-      'thumbnail',
-      'revisions'
-      ),
-    'hierarchical' => true,
-    'menu_position' => 12
-);
-  register_post_type( 'meldingen', $args );
+//
+//     $args = array(
+//     'label' => 'Meldingen',
+//     'public' => true,
+//     'menu_icon'=>'dashicons-megaphone',
+//     'supports' => array(
+//       'title',
+//       'editor',
+//       'excerpt',
+//       'thumbnail',
+//       'revisions'
+//       ),
+//     'hierarchical' => true,
+//     'menu_position' => 12
+// );
+//   register_post_type( 'meldingen', $args );
 
    	flush_rewrite_rules( false );
  }
 
- 
+
 
  add_action('admin_menu', 'post_remove');
  add_action( 'init', 'codex_custom_init' );
@@ -202,6 +202,6 @@ $args = array(
  add_image_size( 'team-landscape', 1000, 9999 );
 
   //466 pixels wide (and unlimited height)
-      
-     
+
+
 ?>
