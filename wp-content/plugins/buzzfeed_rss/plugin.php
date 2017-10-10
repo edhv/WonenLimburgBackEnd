@@ -53,45 +53,95 @@ if( class_exists('BuzzFeed_collection') ) {
 			$xmlObject = simplexml_load_string($feedObject, null, LIBXML_NOCDATA);
 			$json = json_encode($xmlObject);
 			$rssArray = json_decode($json,TRUE);
-			
+            
+            // EDIT START
 			if (isset($rssArray['channel']['item'])) {
 			
-				$items = $rssArray['channel']['item'];
-
-				// walk through the rss items
-				foreach ($items as $index => $rssItem) {
+                $rssItem = $rssArray['channel']['item'];
+                
+                // walk through the rss items
+                // EDIT: THERE IS ONLY ONE ITEM
+				//foreach ($items as $index => $rssItem) { 
 
 					$feed_object = new BuzzFeedRss_object();
 
-					$feed_object->set_type($source);
-					$feed_object->set_feed_id($rssItem['guid']);
-					$feed_object->set_timestamp(strtotime($rssItem['pubDate']));
-					$feed_object->set_date(strtotime($rssItem['pubDate']));
-					$feed_object->set_title($rssItem['title']);
-					$feed_object->set_text($rssItem['description']);
-					$feed_object->set_media("");
+                    //var_dump(json_encode($rssItem));
 
-					
+                    $feed_object->set_type($source);
+                    $feed_object->set_feed_id($rssItem['guid']);
+                    $feed_object->set_timestamp(strtotime($rssItem['pubDate']));
+                    $feed_object->set_date(strtotime($rssItem['pubDate']));
+                    $feed_object->set_title($rssItem['title']);
+                    $feed_object->set_text($rssItem['description']);
+                    $feed_object->set_media("");
+
+                    
 
 
 
-					//
-					$fullContent = $this->scrapeUrlContents($rssItem['guid'], strtotime($rssItem['pubDate']));
+                    //
+                    $fullContent = $this->scrapeUrlContents($rssItem['guid'], strtotime($rssItem['pubDate']));
 
-					if ($fullContent['text']) {
-						$feed_object->set_text($fullContent['text']);
-					}
+                    if ($fullContent['text']) {
+                        $feed_object->set_text($fullContent['text']);
+                    }
 
-					if ($fullContent['img']) {
-						$feed_object->set_media($fullContent['img']);
-					}
+                    if ($fullContent['img']) {
+                        $feed_object->set_media($fullContent['img']);               
+                    }
 
 					$this->feeds[] = $feed_object;
 
-				}
+				//}
 
-				$this->total = count($items);
-			}
+				$this->total = 1;
+            }
+            
+            // EDIT END
+
+            // // OLD VERSION START
+            // if (isset($rssArray['channel']['item'])) {
+                
+            //         $items = $rssArray['channel']['item'];
+                    
+            //         // walk through the rss items
+            //         foreach ($items as $index => $rssItem) {
+    
+            //             $feed_object = new BuzzFeedRss_object();
+    
+            //             //var_dump(json_encode($rssItem));
+    
+            //             $feed_object->set_type($source);
+            //             $feed_object->set_feed_id($rssItem['guid']);
+            //             $feed_object->set_timestamp(strtotime($rssItem['pubDate']));
+            //             $feed_object->set_date(strtotime($rssItem['pubDate']));
+            //             $feed_object->set_title($rssItem['title']);
+            //             $feed_object->set_text($rssItem['description']);
+            //             $feed_object->set_media("");
+    
+                        
+    
+    
+    
+            //             //
+            //             $fullContent = $this->scrapeUrlContents($rssItem['guid'], strtotime($rssItem['pubDate']));
+    
+            //             if ($fullContent['text']) {
+            //                 $feed_object->set_text($fullContent['text']);
+            //             }
+    
+            //             if ($fullContent['img']) {
+            //                 $feed_object->set_media($fullContent['img']);               
+            //             }
+    
+            //             $this->feeds[] = $feed_object;
+    
+            //         }
+    
+            //         $this->total = count($items);
+            //     }
+            //     // OLD VERSION END
+
 			//Set the cache
 			$this->set_cache();
 
