@@ -58,14 +58,13 @@ if( class_exists('BuzzFeed_collection') ) {
 
 			//print_r($pagefeed);
 			$this->total = count($pagefeed['data']);
-			
-			
+
+            //EDIT START
 			foreach($pagefeed['data'] as $post) 
 				{
-					
-					
-			
-					if ($post['type'] == 'status' || $post['type'] == 'link' || $post['type'] == 'photo') 
+                    // $post = $facebook->api("/" . $postObject['id']);
+
+					if (empty($post['message']) === false || empty($post['story']) === false || empty($post['name']) === false) 
 					{
 
 							$array = array();
@@ -75,35 +74,37 @@ if( class_exists('BuzzFeed_collection') ) {
 							$array['date'] = strtotime($post['created_time']);
 							$array['title'] = '';
 							
-							if($post['status_type']!='shared_story'){
-							if (empty($post['message']) === false) {
-								$array['text'] = htmlentities($post['message']);
-							} elseif (empty($post['story']) === false) {
-								$array['text'] = htmlentities($post['story']);
-							} elseif (empty($post['name']) === false) {
-								$array['text']=htmlentities($post['name']);
-							} else {
-								$array['text'] = "";
-							}}
-							else{
-								if (empty($post['description']) === false) {
-									$array['text'] = htmlentities($post['description']);
-								}
-							}
+                            // if($post['status_type']!='shared_story')
+                            // {
+                            if (empty($post['message']) === false) {
+                                $array['text'] = htmlentities($post['message']);
+                            } elseif (empty($post['story']) === false) {
+                                $array['text'] = htmlentities($post['story']);
+                            } elseif (empty($post['name']) === false) {
+                                $array['text']=htmlentities($post['name']);
+                            } else {
+                                $array['text'] = "";
+                            }
+                           // }
+							// else{
+							// 	if (empty($post['description']) === false) {
+							// 		$array['text'] = htmlentities($post['description']);
+							// 	}
+							// }
 							
 							
 							$array['source_url'] = 'https://www.facebook.com/'.$source.'/posts/'.$postid;
-							if(isset($post['object_id'])){
-								$array['media']=$post['object_id'];
-								$media_feed = $facebook->api("/".$array['media']);
-							if(!empty($media_feed['images']['0']['source'])){
-								$array['media']=$media_feed['images']['0']['source'];
-								}
-								else{$array['media']='';}
-								}					
-							else{
-								$array['media']='';
-							}												
+							// if(isset($post['object_id'])){
+							// 	$array['media']=$post['object_id'];
+							// 	$media_feed = $facebook->api("/".$array['media']);
+							// if(!empty($media_feed['images']['0']['source'])){
+							// 	$array['media']=$media_feed['images']['0']['source'];
+							// 	}
+							// 	else{$array['media']='';}
+							// 	}					
+							// else{
+							$array['media']='';
+							// }												
 
 							$keywords = '';
 							$string = $array['text'];
@@ -146,8 +147,96 @@ if( class_exists('BuzzFeed_collection') ) {
 					}
 										
 				}
-			
-			
+			//EDIT END
+            // // OLD START
+            
+            // foreach($pagefeed['data'] as $post) 
+            // {
+            //     var_dump($post);
+            //     if ($post['type'] == 'status' || $post['type'] == 'link' || $post['type'] == 'photo') 
+            //     {
+
+            //             $array = array();
+            //             $id = $post['id'];
+            //             $postid = explode('_',$id);
+            //             $postid = $postid[1];
+            //             $array['date'] = strtotime($post['created_time']);
+            //             $array['title'] = '';
+                        
+            //             if($post['status_type']!='shared_story'){
+            //             if (empty($post['message']) === false) {
+            //                 $array['text'] = htmlentities($post['message']);
+            //             } elseif (empty($post['story']) === false) {
+            //                 $array['text'] = htmlentities($post['story']);
+            //             } elseif (empty($post['name']) === false) {
+            //                 $array['text']=htmlentities($post['name']);
+            //             } else {
+            //                 $array['text'] = "";
+            //             }}
+            //             else{
+            //                 if (empty($post['description']) === false) {
+            //                     $array['text'] = htmlentities($post['description']);
+            //                 }
+            //             }
+                        
+                        
+            //             $array['source_url'] = 'https://www.facebook.com/'.$source.'/posts/'.$postid;
+            //             if(isset($post['object_id'])){
+            //                 $array['media']=$post['object_id'];
+            //                 $media_feed = $facebook->api("/".$array['media']);
+            //             if(!empty($media_feed['images']['0']['source'])){
+            //                 $array['media']=$media_feed['images']['0']['source'];
+            //                 }
+            //                 else{$array['media']='';}
+            //                 }					
+            //             else{
+            //                 $array['media']='';
+            //             }												
+
+            //             $keywords = '';
+            //             $string = $array['text'];
+            //             $str = 1;
+            //              preg_match_all('/#(\w+)/',$string,$matches);
+            //               $i = 0;
+            //               if ($str) {
+            //                foreach ($matches[1] as $match) {
+            //                $count = count($matches[1]);
+            //                $keywords .= "$match";
+            //                $i++;
+            //                if ($count > $i) $keywords .= ", ";
+            //               }
+            //              } else {
+            //                foreach ($matches[1] as $match) {
+            //                 $keyword[] = $match;
+            //                    }
+            //                   $keywords = $keyword;
+            //              }
+                        
+            //             $array['tags'] = $keywords;
+            //             $array['geo'] = '';
+                        
+                                        
+            //             // Compose object
+            //             $feed_object = new BuzzFeedFacebook_object();
+            //             $feed_object->set_type($this->type);
+            //             $feed_object->set_feed_id($array['source_url']);
+            //             $feed_object->set_timestamp($array['date']);
+            //             $feed_object->set_date($array['date']);
+            //             $feed_object->set_title($array['title']);
+            //             $feed_object->set_text($array['text']);
+            //             $feed_object->set_media($array['media']);
+            //             $feed_object->set_url($array['source_url']);
+            
+            //             $this->feeds[] = $feed_object;
+                        
+                    
+                    
+            //     }
+                                    
+            // }
+        
+
+            // // OLD END
 
 			//Set the cache
 			$this->set_cache();
